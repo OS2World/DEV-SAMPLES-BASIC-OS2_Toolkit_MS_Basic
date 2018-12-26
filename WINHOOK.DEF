@@ -1,0 +1,8 @@
+  NAME           WINHOOK   WINDOWAPI
+   
+  DESCRIPTION    'BASIC Presentation Manager Hook Program'
+  PROTMODE
+  HEAPSIZE       1024
+  STACKSIZE      8192
+  EXPORTS        BasClientWndProc
+                 BasMsgFilterHook

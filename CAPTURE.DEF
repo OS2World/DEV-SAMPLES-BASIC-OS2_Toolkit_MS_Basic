@@ -1,0 +1,8 @@
+  NAME         CAPTURE  WINDOWAPI
+  
+  DESCRIPTION  'Captures Screen to Bitmap'
+  PROTMODE
+  HEAPSIZE     1024
+  STACKSIZE    8192
+  EXPORTS      BasClientWndProc
+

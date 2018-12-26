@@ -1,0 +1,7 @@
+  NAME		 WININPUT  WINDOWAPI
+   
+  DESCRIPTION	 'BASIC Presentation Manager Mouse/Keyboard Input Program'
+  PROTMODE
+  HEAPSIZE       1024
+  STACKSIZE      8192
+  EXPORTS	 BasClientWndProc

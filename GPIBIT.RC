@@ -1,0 +1,3 @@
+/* GpiBit.RC defines 2 bitmaps for GpiBit.BAS */
+BITMAP 1 GpiBit1.BMP
+BITMAP 2 GpiBit2.BMP

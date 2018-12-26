@@ -1,0 +1,7 @@
+  NAME		 BOUNCE  WINDOWAPI
+   
+  DESCRIPTION	 'BASIC Presentation Manager Skeleton Program'
+  PROTMODE
+  HEAPSIZE       1024
+  STACKSIZE      8192
+  EXPORTS	 BasClientWndProc BasClientWndProc1 BasClientWndProc2 BasClientWndProc3 BasClientWndProc4

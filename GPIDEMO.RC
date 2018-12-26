@@ -1,0 +1,109 @@
+#include <os2.h>
+
+#define ID_RESOURCE      1
+#define ID_POINTER       2
+
+#define IDM_EXIT                 5
+#define IDM_ARC                  10
+#define IDM_LINE                 20
+#define IDM_AREA                 30
+#define IDM_MARK                 40
+#define IDM_BIT                  60
+#define IDB_BITMAP1              100
+#define IDB_BITMAP2              200
+#define IDB_BITMAP3              300
+
+ICON    ID_RESOURCE  gpidemo.ico
+BITMAP  IDB_BITMAP1  gpidemo1.bmp
+BITMAP  IDB_BITMAP2  gpidemo2.bmp
+BITMAP  IDB_BITMAP3  gpidemo3.bmp
+
+MENU ID_RESOURCE
+{
+  MENUITEM "E~xit",                       IDM_EXIT
+  SUBMENU  "~Arcs",                       IDM_ARC
+ {
+   MENUITEM "Gpi~PointArc",               IDM_ARC+1
+   MENUITEM "Gpi~FullArc",                IDM_ARC+2
+   MENUITEM "GpiPa~rtialArc",             IDM_ARC+3
+   MENUITEM "GpiPolyFilletS~harp",        IDM_ARC+4
+   MENUITEM "GpiPolySp~line",             IDM_ARC+5
+   MENUITEM "GpiPolyFille~t",             IDM_ARC+6
+   MENUITEM SEPARATOR
+   MENUITEM "~Demo All",                  IDM_ARC+7
+ }
+ MENUITEM "~Lines",                       IDM_LINE
+ SUBMENU  "A~rea/Colors",                 IDM_AREA
+ {
+   MENUITEM "Fill ~Patterns and Colors",  IDM_AREA+1
+   SUBMENU "~Begin/End Area",             IDM_AREA+2
+   {
+     MENUITEM "Using GpiPoly~Line",       IDM_AREA+3
+     MENUITEM "Using GpiPoly~Fillet",     IDM_AREA+4
+     MENUITEM "Using GpiPolyFillet~Sharp",IDM_AREA+5
+   }
+ }
+ SUBMENU "Graph~Markers",                 IDM_MARK
+ {
+   MENUITEM "~Cross",                     IDM_MARK+1
+   MENUITEM "~Plus",                      IDM_MARK+2
+   MENUITEM "~Diamond",                   IDM_MARK+3
+   MENUITEM "~Square",                    IDM_MARK+4
+   MENUITEM "Si~x Point Start",           IDM_MARK+5
+   MENUITEM "~Eight Point Star",          IDM_MARK+6
+   MENUITEM "Solid D~iamond",             IDM_MARK+7
+   MENUITEM "Solid S~quare",              IDM_MARK+8
+   MENUITEM "Do~t",                       IDM_MARK+9
+   MENUITEM "S~mall Circle",              IDM_MARK+10
+ }
+ SUBMENU "~Bitmaps",                      IDM_BIT
+ {
+   MENUITEM "~2  Color Bitmap",             IDM_BIT+1
+   MENUITEM "~16 Color Bitmap",             IDM_BIT+2
+   MENUITEM "~Resize Bitmap",               IDM_BIT+3
+   MENUITEM "~Capture Bitmap",              IDM_BIT+4
+   MENUITEM "Custom ~Fill with 8X8 Bitmap", IDM_BIT+5
+   SUBMENU  "~System Bitmaps",              IDM_BIT+6
+   {
+     MENUITEM "Show all bitmaps", IDM_BIT+10
+     MENUITEM "SBMP SYSMENU",   IDM_BIT+11
+     MENUITEM "SBMP SBUPARROW", IDM_BIT+12
+     MENUITEM "SBMP SBDNARROW", IDM_BIT+13
+     MENUITEM "SBMP SBRGARROW", IDM_BIT+14
+     MENUITEM "SBMP SBLFARROW", IDM_BIT+15
+     MENUITEM "SBMP MENUCHECK", IDM_BIT+16
+     MENUITEM "SBMP CHECKBOXES", IDM_BIT+17
+     MENUITEM "SBMP BTNCORNERS", IDM_BIT+18
+     MENUITEM "SBMP MINBUTTON", IDM_BIT+19
+     MENUITEM "SBMP MAXBUTTON", IDM_BIT+20
+     MENUITEM "SBMP RESTOREBUTTON", IDM_BIT+21
+     MENUITEM "SBMP CHILDSYSMENU", IDM_BIT+22
+     MENUITEM "SBMP DRIVE", IDM_BIT+25
+     MENUITEM "SBMP FILE", IDM_BIT+26
+     MENUITEM "SBMP FOLDER", IDM_BIT+27
+     MENUITEM "SBMP TREEPLUS", IDM_BIT+28
+     MENUITEM "SBMP TREEMINUS", IDM_BIT+29
+     MENUITEM "SBMP PROGRAM", IDM_BIT+32
+     MENUITEM "SBMP MENUATTACHED", IDM_BIT+33
+     MENUITEM "SBMP SIZEBOX", IDM_BIT+34
+   }
+ }
+}
+
+DLGTEMPLATE ID_RESOURCE
+  {
+  DIALOG "", 0, 115, 73, 201, 66, FS_NOBYTEALIGN | FS_DLGBORDER |
+                                  WS_VISIBLE | WS_SAVEBITS
+    {
+    LTEXT "3"     -1, 43, 32, 20, 8
+    RTEXT "100"   -1, 135, 32, 20, 8
+    CTEXT "Use SCROLL Bar to select number of points" -1, 5, 53, 190, 8
+    CONTROL "" ID_RESOURCE+1, 26, 18, 146, 11, WC_SCROLLBAR, SBS_HORZ |
+                                                        WS_VISIBLE
+    CTEXT "" -1, 88, 33, 23, 10, SS_FGNDFRAME
+    CTEXT "" ID_RESOURCE+2, 89, 34, 21, 8
+    DEFPUSHBUTTON "OK" DID_OK, 80, 2, 38, 12, WS_GROUP
+    }
+  }
+
+

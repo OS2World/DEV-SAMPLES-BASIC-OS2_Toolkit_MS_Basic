@@ -1,0 +1,7 @@
+  NAME         GPIPATH          WINDOWAPI
+  
+  DESCRIPTION  'BASIC Presentation Manager Demo for GpiPath.BI'
+  PROTMODE
+  HEAPSIZE     1024
+  STACKSIZE    8192
+  EXPORTS      BasClientWndProc

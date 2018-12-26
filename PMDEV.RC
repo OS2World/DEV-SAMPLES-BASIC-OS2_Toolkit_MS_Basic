@@ -1,0 +1,3 @@
+/*  PMDev.RC is resource file that defines a bitmap for PMDev.BAS  */
+
+BITMAP 1 PMDev.BMP

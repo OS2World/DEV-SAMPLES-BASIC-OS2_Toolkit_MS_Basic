@@ -1,0 +1,11 @@
+For those users new to PM Programming the following steps are advised:
+
+  1. Follow the Getting Started section in this application note.
+  2. Follow through the WELCOME programming examples in Petzold's book
+  3. Look at example programs in both Petzold's book and this application
+note.
+
+The series of programs provided in the WELCOME directory are equivalent to
+the C programs in the second and third chapters of  "Programming the OS/2
+Presentation Manager". These programs are meant to be used in conjunction
+with this book to help develop an understanding of PM programming.

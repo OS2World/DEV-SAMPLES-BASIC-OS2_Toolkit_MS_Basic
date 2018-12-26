@@ -1,0 +1,7 @@
+  NAME           GPIBIT          WINDOWAPI
+   
+  DESCRIPTION    'BASIC Presentation Manager Demo for GpiBit.BI'
+  PROTMODE
+  HEAPSIZE       1024
+  STACKSIZE      8192
+  EXPORTS   	 ClientWndProc RegBas BasClientWndProc

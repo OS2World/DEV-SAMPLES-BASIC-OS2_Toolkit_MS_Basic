@@ -1,0 +1,7 @@
+  NAME		 WINFRAME  WINDOWAPI
+   
+  DESCRIPTION	 'BASIC Presentation Manager Demo for WinFrame.BI'
+  PROTMODE
+  HEAPSIZE       1024
+  STACKSIZE      8192
+  EXPORTS	 BasClientWndProc

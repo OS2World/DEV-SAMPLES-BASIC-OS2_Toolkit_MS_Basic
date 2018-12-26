@@ -1,0 +1,7 @@
+  NAME		 GpiColor  WINDOWAPI
+   
+  DESCRIPTION    'BASIC Presentation Manager Color Program'
+  PROTMODE
+  HEAPSIZE       1024
+  STACKSIZE      8192
+  EXPORTS	 BasClientWndProc

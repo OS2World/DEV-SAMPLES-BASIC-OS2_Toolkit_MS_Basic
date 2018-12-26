@@ -1,0 +1,27 @@
+/************************************************************
+*   File Name:   CAL.RC
+*
+*   Description: This is the resource file for the final PM
+*                version of CAL.BAS. It defines a dialog and
+*                menu for entering a date.
+************************************************************/
+
+#define WS_SAVEBITS         0x04000000L
+#define WS_CLIPSIBLINGS     0x10000000L
+#define ES_MARGIN           0x00000008L
+DLGTEMPLATE 1
+BEGIN
+    DIALOG "", 1, 0, 0, 84, 52, WS_SAVEBITS | WS_CLIPSIBLINGS
+    BEGIN
+        LTEXT "Month", 256, 10, 20, 27, 9
+        LTEXT "Year", 257, 10, 37, 23, 8
+        ENTRYFIELD "", 1, 50, 37, 24, 9, ES_MARGIN
+        ENTRYFIELD "", 2, 50, 20, 24, 9, ES_MARGIN
+        DEFPUSHBUTTON "OK", 3, 22, 5, 31, 9
+    END
+END
+
+MENU 2
+BEGIN
+    MENUITEM "New ~Date",1
+END

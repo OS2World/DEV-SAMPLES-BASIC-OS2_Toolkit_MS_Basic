@@ -1,0 +1,51 @@
+/************************************************************
+*  Program Name: GpiPath.RC
+*
+*  Description:  Resource file for GpiPath.BAS. This defines
+*                the menu to control the path.
+************************************************************/
+
+#define ID_RESOURCE      1
+
+#define IDM_EXIT                 10
+#define IDM_LINEEND              20
+#define IDM_LINEJOIN             30
+#define IDM_LINEWIDTH            40
+#define IDM_STROKEPATH           50
+#define IDM_FILLPATH             60
+#define IDM_CLIPPATH             70    
+
+MENU ID_RESOURCE
+{
+  MENUITEM "E~xit",           IDM_EXIT
+  SUBMENU  "Line~End",        IDM_LINEEND
+  {
+    MENUITEM "Flat",          IDM_LINEEND+2
+    MENUITEM "Square",        IDM_LINEEND+3
+    MENUITEM "Round",         IDM_LINEEND+4
+  }
+  SUBMENU  "Line~Join",       IDM_LINEJOIN
+  {
+    MENUITEM "Bevel",         IDM_LINEJOIN+2
+    MENUITEM "Round",         IDM_LINEJOIN+3
+    MENUITEM "Mitre",         IDM_LINEJOIN+4
+  }
+  SUBMENU "Line ~Width",      IDM_LINEWIDTH
+  {
+    MENUITEM "10 pixels",     IDM_LINEWIDTH+1  
+    MENUITEM "20 pixels",     IDM_LINEWIDTH+2  
+    MENUITEM "30 pixels",     IDM_LINEWIDTH+3 
+    MENUITEM "40 pixels",     IDM_LINEWIDTH+4
+  }
+  MENUITEM   "~StrokePath",    IDM_STROKEPATH
+  SUBMENU    "~FillPath",      IDM_FILLPATH
+  {
+    MENUITEM "Fill the ~Path",     IDM_FILLPATH+1
+    MENUITEM "Fill the ~Interior", IDM_FILLPATH+2
+  }
+  SUBMENU "~ClipPath",              IDM_CLIPPATH
+  {
+    MENUITEM "Clip the ~Path",      IDM_CLIPPATH+1
+    MENUITEM "Clip Path ~Interior", IDM_CLIPPATH+2
+  }
+}

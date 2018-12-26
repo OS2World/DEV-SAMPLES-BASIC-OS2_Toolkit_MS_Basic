@@ -1,0 +1,7 @@
+  NAME           PMDEV     WINDOWAPI
+   
+  DESCRIPTION    'BASIC Presentation Manager Device Context Program'
+  PROTMODE
+  HEAPSIZE       1024
+  STACKSIZE      8192
+  EXPORTS	 BasClientWndProc

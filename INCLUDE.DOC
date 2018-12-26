@@ -1,0 +1,54 @@
+C Header file      BASIC INCLUDE file   Description of BASIC INCLUDEs
+-------------      ------------------   -----------------------------
+**none**           PMBASE.BI            Necessary functions for SKELETON
+**none**         # REGBAS.BI            MAKELONG and RegBas functions
+**none**           OPENDLG.BI           Works with OPENDLG.DLL from Toolkit
+OS2DEF.H       # * OS2DEF.BI            Standard types and constants
+PMAVIO.H           PMAVIO.BI            Advanced I/O functions
+PMDEV.H            PMDEV.BI             Device constants and functions
+PMFONT.H         * PMFONT.BI            Font types and constants
+PMGPI.H            GPIARC.BI            Arc functions
+                   GPIAREA.BI           Area and pattern functions
+                   GPIATTR.BI           Attribute constants and functions
+(PMBITMAP.H)       GPIBIT.BI            Bitmap functions
+                   GPICHAR.BI           Character display functions
+                   GPICOLOR.BI          Color control functions
+                   GPICONT.BI           General graphics control
+                   GPIELEM.BI           Element functions
+                 * GPIERROR.BI          Graphics error constants
+                   GPIFONT.BI           Font functions
+                   GPILINE.BI           Line control functions
+                   GPIMARK.BI           Marker functions and constants
+                   GPIMETA.BI           Metafile control functions
+                   GPIPATH.BI           Path functions and constants
+                   GPIRGN.BI            Region control functions
+                   GPISEG.BI            Graphics segment control functions
+                   GPITRANS.BI          Transformation matrix functions
+PMORD.H          * PMORD.BI             Translation of GOCA orders
+PMSHL.H          + PMSHL.BI             Shell constants and functions
+PMWIN.H            WINACCEL.BI          Accelerator functions
+                 * WINBUTTN.BI          Button controls
+                   WINCLIP.BI           Clipboard manager
+                   WINDDE.BI            Dynamic Data Exchange
+                   WINDIALG.BI          Dialog Manager
+                 * WINENTRY.BI          Entryfield controls
+                   WINERR.BI            Windows error codes
+                 # WINFRAME.BI          Frame Manager
+               # * WINGEN.BI            General Window constants
+                   WINHOOK.BI           Hook manager
+                   WININPUT.BI          Keyboard and mouse input
+                 * WINLIST.BI           Listboxes
+                 # WINMAN1.BI           Window Manager Subsection 1
+                   WINMAN2.BI           Window Manager Subsection 2
+                   WINMENU.BI           Menu manager
+                   WINMISC.BI           Miscellaneous functions
+                 # WINMSGS.BI           Window Messages
+                   WINPOINT.BI          Pointer manager
+                   WINRECT.BI           Rectangle routines
+                 + WINSHELL.BI          Shell API
+                   WINSYS.BI            System values
+                   WINTRACK.BI          WinTracRect()
+
+* No FUNCTIONs (CONSTants and TYPEs only)
++ Contains byte FUNCTIONs or parameters which are impossible in BASIC
+# Some types, constants or functions moved to PMBASE.BI

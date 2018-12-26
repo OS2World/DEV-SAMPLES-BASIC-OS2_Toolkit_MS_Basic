@@ -1,0 +1,7 @@
+  NAME		 WINSYS    WINDOWAPI
+   
+  DESCRIPTION	 'BASIC Presentation Manager Demo for WinSys.BI'
+  PROTMODE
+  HEAPSIZE       1024
+  STACKSIZE      8192
+  EXPORTS	 BasClientWndProc

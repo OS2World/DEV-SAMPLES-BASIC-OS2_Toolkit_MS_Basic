@@ -1,0 +1,7 @@
+  NAME		 WINMENU   WINDOWAPI
+   
+  DESCRIPTION	 'BASIC PM demo of WinMenu.BI'
+  PROTMODE
+  HEAPSIZE       1024
+  STACKSIZE      8192
+  EXPORTS	 BasClientWndProc

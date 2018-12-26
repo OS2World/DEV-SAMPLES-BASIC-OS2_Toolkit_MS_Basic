@@ -1,0 +1,118 @@
+#include <os2.h>
+
+#define IDRESOURCE              1
+#define IDICON                  1
+#define IDPOINTER               2
+
+#define IDM_EDIT                10
+#define    IDM_LOADFILE         11
+#define    IDM_LOADCLIPBOARD    12
+#define    IDM_SAVE             13
+#define    IDM_COPY             14
+#define    IDM_PASTE            15
+#define    IDM_ERASEWINDOW      16
+#define    IDM_EXIT             17
+#define IDM_CAPTURE             20
+#define    IDM_CAPTURESCREEN    21
+#define    IDM_CAPTUREWINDOW    22
+#define    IDM_CAPTUREPORTION   23
+#define       IDM_USINGTRACK    24
+#define       IDM_USINGFRAME    25
+#define IDM_OPTIONS             30
+#define    IDM_HIDE             31
+#define    IDM_SHOW             32
+#define    IDM_ACTUAL           33
+#define    IDM_STRETCH          34
+#define    IDM_DELAY            40
+#define      IDM_1_SECOND       41
+#define      IDM_5_SECONDS      45
+#define      IDM_20_SECONDS     60
+#define      IDM_30_SECONDS     70
+#define      IDM_60_SECONDS     100
+#define IDM_WINDOWSIZE              120
+#define    IDM_SETFRAMEWINDOWSIZE   121
+#define    IDM_MAXIMIZEFRAMEWINDOW  122
+#define    IDM_RESTOREWINDOW        123
+#define    IDM_MAXIMIZECLIENTWINDOW 124
+#define    IDM_RESTORECLIENTWINDOW  125
+
+
+ICON    IDICON      capture.ico
+POINTER IDPOINTER   capture.ptr
+
+MENU IDRESOURCE
+{
+  SUBMENU  "~Edit",                         IDM_EDIT
+  {
+    MENUITEM "~LOAD (from file)",           IDM_LOADFILE
+    MENUITEM "L~OAD (from Clipboard)",      IDM_LOADCLIPBOARD
+    MENUITEM "~SAVE (to file)",             IDM_SAVE,,MIA_DISABLED
+    MENUITEM SEPARATOR
+    MENUITEM "~COPY (to Clipboard)",        IDM_COPY,,MIA_DISABLED
+    MENUITEM "~PASTE (from Clipboard)",     IDM_PASTE,,MIA_DISABLED
+    MENUITEM SEPARATOR
+    MENUITEM "~Erase window",               IDM_ERASEWINDOW
+    MENUITEM SEPARATOR
+    MENUITEM "E~xit",                       IDM_EXIT
+  }
+
+  SUBMENU  "~Capture",                      IDM_CAPTURE
+  {
+    MENUITEM "~Entire Screen",              IDM_CAPTURESCREEN
+    MENUITEM "~Viewing Window Contents",    IDM_CAPTUREWINDOW
+    SUBMENU  "~Portion of Screen",          IDM_CAPTUREPORTION
+    {
+      MENUITEM "Using ~Tracking Rectangle", IDM_USINGTRACK
+      MENUITEM "Using ~Viewing Window",     IDM_USINGFRAME
+    }
+  }
+  SUBMENU  "~Options",                      IDM_OPTIONS
+  {
+    MENUITEM "~Hide Window during capture",      IDM_HIDE,,MIA_CHECKED
+    MENUITEM "~Show Window during capture",      IDM_SHOW
+    MENUITEM SEPARATOR
+    MENUITEM "Display ~Actual size",             IDM_ACTUAL,,MIA_CHECKED
+    MENUITEM "Stretch/~Compress to fill window", IDM_STRETCH
+    MENUITEM SEPARATOR
+    SUBMENU  "~Delay",                           IDM_DELAY
+    {
+      MENUITEM "~1  seconds",                    IDM_1_SECOND,,MIA_CHECKED
+      MENUITEM "~5  seconds",                    IDM_5_SECONDS
+      MENUITEM "~20 seconds",                    IDM_20_SECONDS
+      MENUITEM "~30 seconds",                    IDM_30_SECONDS
+      MENUITEM "~60 seconds",                    IDM_60_SECONDS
+    }
+  }
+  SUBMENU "~Window",                          IDM_WINDOWSIZE
+  {
+    MENUITEM "~Set Frame Window Size",        IDM_SETFRAMEWINDOWSIZE
+    MENUITEM SEPARATOR
+    MENUITEM "Maximize ~Frame Window",        IDM_MAXIMIZEFRAMEWINDOW
+    MENUITEM "Restore F~rame Window",         IDM_RESTOREWINDOW
+    MENUITEM SEPARATOR
+    MENUITEM "Maximize ~Viewing Window",      IDM_MAXIMIZECLIENTWINDOW
+    MENUITEM "Restore V~iewing Window",       IDM_RESTORECLIENTWINDOW
+  }
+}
+
+DLGTEMPLATE IDRESOURCE
+{
+  DIALOG "SET FRAME WINDOW SIZE", 1, 67, 20, 200, 103,
+                                  FS_NOBYTEALIGN | FS_DLGBORDER |
+                                  WS_VISIBLE     | WS_SAVEBITS,
+                                  FCF_TITLEBAR
+  {
+    ENTRYFIELD "", 2,  43, 50, 38, 8, ES_CENTER | SS_FGNDFRAME
+    ENTRYFIELD "", 3, 128, 51, 39, 8, ES_CENTER | SS_FGNDFRAME
+    DEFPUSHBUTTON "OK",       4,   3, 3, 39, 12
+    PUSHBUTTON    "CANCEL",   5,  45, 3, 42, 12
+    PUSHBUTTON    "MAXIMIZE", 6,  90, 3, 53, 12
+    PUSHBUTTON    "RESTORE",  7, 146, 3, 51, 12
+    CONTROL "", 8,   7, 34, 110, 11, WC_SCROLLBAR, SBS_HORZ | WS_VISIBLE
+    CONTROL "", 9, 174, 23,  14, 66, WC_SCROLLBAR, SBS_VERT | WS_VISIBLE
+    CTEXT "Width",  -1,  45, 64, 34, 9
+    CTEXT "Height", -1, 130, 65, 35, 8
+   }
+}
+
+

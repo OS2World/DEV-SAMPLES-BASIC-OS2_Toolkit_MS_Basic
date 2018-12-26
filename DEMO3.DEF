@@ -1,0 +1,7 @@
+  NAME           DEMO3  WINDOWAPI
+   
+  DESCRIPTION    'BASIC Presentation Manager PM Demo3 Program'
+  PROTMODE
+  HEAPSIZE       1024
+  STACKSIZE      8192
+  EXPORTS	 BasClientWndProc

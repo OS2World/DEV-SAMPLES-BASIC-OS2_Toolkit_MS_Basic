@@ -1,0 +1,26 @@
+/************************************************************
+*   File Name:   Demo3.RC
+*
+*   Description: This is the resource file for the final PM
+*                version of Demo3.BAS. It defines a menu for
+*                the sound effects.
+************************************************************/
+
+#define ID_MENU      1
+#define IDM_SOUND    2
+#define IDM_BOUNCING 3
+#define IDM_FALLING  4
+#define IDM_KLAXON   5
+#define IDM_SIREN    6
+#define IDM_QUIT     7
+MENU ID_MENU
+      {
+      SUBMENU "~Sound Effects",          IDM_SOUND
+           {
+           MENUITEM "~Bouncing",   IDM_BOUNCING
+	   MENUITEM "~Falling",   IDM_FALLING
+           MENUITEM "~Klaxon",   IDM_KLAXON
+           MENUITEM "~Siren", IDM_SIREN
+           MENUITEM "~Quit", IDM_QUIT
+           }
+      }

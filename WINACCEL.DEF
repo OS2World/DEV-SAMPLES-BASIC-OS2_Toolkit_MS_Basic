@@ -1,0 +1,7 @@
+  NAME		 WINACCEL  WINDOWAPI
+   
+  DESCRIPTION	 'BASIC PM demo of Menus and Accelerators'
+  PROTMODE
+  HEAPSIZE       1024
+  STACKSIZE      8192
+  EXPORTS	 BasClientWndProc

@@ -1,0 +1,7 @@
+  NAME		 GPIRGN    WINDOWAPI
+   
+  DESCRIPTION	 'BASIC Presentation Manager Region Program'
+  PROTMODE
+  HEAPSIZE       1024
+  STACKSIZE      8192
+  EXPORTS	 BasClientWndProc

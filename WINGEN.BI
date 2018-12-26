@@ -1,0 +1,49 @@
+'**************************************************************
+'*
+'* Include File: WinGen.BI
+'*
+'* Requires:     none
+'*
+'* Description:  General Window Management Constants
+'*
+'*************************************************************
+
+CONST HWNDDESKTOP        =&H00000001
+CONST HWNDOBJECT         =&H00000002
+
+CONST HWNDTOP            =&H00000003
+CONST HWNDBOTTOM         =&H00000004
+
+CONST HWNDTHREADCAPTURE  =&H00000005
+
+
+' Standard Window Styles 
+
+CONST WSVISIBLE          = &H80000000
+CONST WSDISABLED         = &H40000000
+CONST WSCLIPCHILDREN     = &H20000000
+CONST WSCLIPSIBLINGS     = &H10000000
+CONST WSPARENTCLIP       = &H08000000
+CONST WSSAVEBITS         = &H04000000
+CONST WSSYNCPAINT        = &H02000000
+CONST WSMINIMIZED        = &H01000000
+CONST WSMAXIMIZED        = &H00800000
+
+' Dialog manager styles 
+
+CONST WSGROUP            = &H00010000
+CONST WSTABSTOP          = &H00020000
+
+
+' Class styles 
+
+CONST CSMOVENOTIFY       = &H00000001
+CONST CSSIZEREDRAW       = &H00000004
+CONST CSHITTEST          = &H00000008
+CONST CSPUBLIC           = &H00000010
+CONST CSFRAME            = &H00000020
+CONST CSCLIPCHILDREN     = &H20000000
+CONST CSCLIPSIBLINGS     = &H10000000
+CONST CSPARENTCLIP       = &H08000000
+CONST CSSAVEBITS         = &H04000000
+CONST CSSYNCPAINT        = &H02000000

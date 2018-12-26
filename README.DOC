@@ -1,0 +1,3762 @@
+
+                                Disclaimer
+
+
+Before you read or use this information, it is important to read this
+notice of disclaimer.
+
+The documents and/or software included in this package are meant for
+informational purposes only.  Microsoft makes no warranties, either
+expressed or implied, as to this information's suitability for specific
+purposes or its correctness, accuracy, or reliability.  The entire risk as
+to the results and performance of the software is assumed by you.
+
+Neither the authors nor Microsoft nor anyone else who has been involved in
+the creation, production, or delivery of this information/software shall be
+liable for any direct, indirect, consequential, or incidental damages
+(including damages for loss of business profits, business interruption,
+loss of business information, and the like) arising out of the use or
+inability to use such information/software even if Microsoft has been
+advised of the possibility of such damages. Because some states do not
+allow the exclusion or limitation of liability for consequential or
+incidental damages, the above limitation may not apply to you.
+
+
+
+     
+      Note: The information contained in this application note
+      applies to the OS/2 Presentation Manager Programmer's Toolkit
+      Version 1.00 and the Microsoft BASIC Compiler Versions 6.00 and
+      6.00b.
+     
+
+    Application Note: BASIC OS/2 Presentation Manager Toolkit
+                           Supplement
+
+
+The purpose of this application note is to provide BASIC
+programmers with the potential to use the functions built into
+the OS/2 Presentation Manager (PM) using the Microsoft BASIC
+Compiler Version 6.00 or 6.00b.  This is not to take the place of
+either the Presentation Manager Toolkit or Softset; in fact,
+either the Toolkit or Softset is required to use the utilities
+provided in this application note.  Rather, this package supplies
+the BASIC interface, information, and support modules that are
+not provided in the Toolkit and Softset.
+
+This application note is based on the assumption that you are
+familiar with the fundamental concepts of OS/2 programming. It is
+not meant as a complete discussion of PM programming. For a more
+complete discussion of topics relating to PM programming, see
+either Charles Petzold's book, Programming the OS/2 Presentation
+Manager, or the Microsoft OS/2 Programmer's Reference Volume I.
+(Some knowledge of the C language is helpful to follow the
+examples in these books.)
+
+For those of you who are new to PM programming, the following
+steps are advised:
+
+1. Follow the Getting Started section in this application note.
+
+2. Follow through the WELCOME programming examples in Petzold's
+   book.
+
+3. Look at sample programs in both Petzold's book and this
+   application note.
+
+The reasons for using the PM functions are clear. PM functions
+provide a standard interface using a message-based windowing
+system. More important, high-resolution graphics are possible
+using the GPI (graphics programming interface) calls. Since non-
+PM BASIC OS/2 applications are limited to CGA graphics, the GPI
+calls greatly enhance OS/2 graphics from BASIC.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                2
+
+                        Table of Contents
+
+The documentation is divided into sections to give you a brief
+description of PM programming and how to use the utilities
+provided with this package:
+
+     I.  Getting Started...................................4
+     II. General PM Program Structure......................5
+     III.      Support Modules.............................7
+     IV. Utility Routines..................................9
+     V.  Enhancing Existing BASIC Programs................11
+     VI. Examples.........................................14
+     VII.      Limitations................................15
+     VIII.     Resources..................................17
+     IX. Troubleshooting..................................18
+     X.  INCLUDE File Conversion Process..................21
+     XI. Tips on Reading and Converting C Code............24
+     XII.      References.................................26
+
+     Appendix A:.................................Disk Layout     
+     27
+     Appendix B:..................................Help Files     
+     28
+     Appendix C:........................SKELETON.BAS Listing     
+     30
+     Appendix D:........Diagram of Functions in SKELETON.BAS     
+     32
+     Appendix E:..........................Message Flow Chart     
+     33
+     Appendix F:.......................Support Module Source     
+     34
+     Appendix G:..........................CAL.BAS Conversion     
+     37
+     Appendix H:.................Header to INCLUDE Directory     
+     40
+     Appendix I:..............................Reading C Code     
+     41
+     Appendix J:......Glossary of Presentation Manager Terms     
+     44
+     Appendix K:................................Project Team     
+     46
+
+
+                      Character Format Key
+                                
+The documentation for this package uses a variety of character
+formats.  The following table shows the formats and the usage for
+each format:
+
+   Format                Usage
+
+   Times Roman normal         Normal text
+
+   Times Roman italics        C code, book titles
+
+
+
+                                3
+
+
+   TIMES ROMAN SMALL CAPS          Function names
+
+   Courier normal        BASIC or assembly code, OS/2 CMD files
+
+   EITHER FONT ALL CAPS  BASIC keywords
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                4
+
+I. Getting Started
+
+Before following the setup procedure, it is assumed that both the BASIC
+Compiler and Presentation Manager Programmer's Toolkit (PM Toolkit) have
+been installed.
+
+There is a SETUP program included on the main disk. To use this program,
+copy SETUP.EXE to your hard disk and type in SETUP at the OS/2 command
+prompt. This program will automatically install the libraries and INCLUDE
+files on a specified hard disk. The SETUP program will automatically
+configure the system to user preferences, but for those who want it, the
+manual procedure is presented as follows:
+
+1. Copying Files
+
+   The first step is to copy the files to the hard disk. (See Appendix A:
+   Disk Layout for a diagram of the layout of the source disks.) The major
+   files needed are the following:
+
+   a. Library files (in the LIB subdirectory of the main disk).
+   b. INCLUDE files (in the INCLUDE subdirectory of the main disk).
+   c. PMBC files (in the root directory of the main disk).
+   d. Help files (in the HELP directory of the main disk). See Appendix B:
+      Help Files for information on how to install and use the Help files.
+
+2. Modifying PMBC.CMD
+
+   The second step is to modify the PMBC command files. These command files
+   aid in compiling PM programs using BASIC. The default PMBC.CMD file is
+   shown below:
+
+   @ECHO OFF
+   CD C:\PMBASIC\INCLUDE
+   BC /O C:\PMBASIC\CODE\%1,C:\PMBASIC\CODE\%1;
+   CD C:\PMBASIC\CODE
+   LINK /NOE %1,%1,%1,OS2.LIB REGBAS.LIB,%1
+   %1
+
+   This file assumes that the distribution disks were copied to a
+   subdirectory called PMBASIC on Drive C. It also assumes that the LIB
+   environment variable was set to point to the subdirectory that contains
+   REGBAS.LIB and OS2.LIB (note: OS2.LIB must be copied over from the PM
+   Toolkit) and the PATH environment variable points to the subdirectory
+   that contains BC.EXE and LINK.EXE.
+
+3. Compiling a PM Program
+
+   The PMBC command file is an aid to compile PM programs using BASIC. PMBC
+   is used by typing in PMBC followed by the name of the file to compile.
+   (Note: It is important NOT to put an extension on the filename given to
+   PMBC.) To compile the program SKELETON.BAS, the following command line
+   is used:
+
+   PMBC SKELETON
+
+
+
+                                     5
+
+   
+   This creates and executes SKELETON.EXE.
+
+   The other command files -- PMBCR.CMD, PMBCD.CMD, and PMBCRD.CMD -- all
+   create executables, but each performs a slightly different function.
+   PMBCR.CMD also adds a resource to the executable defined by the resource
+   script file with the same name with an .RC extension. PMBCD.CMD creates
+   executables for CodeView. PMBCRD.CMD both creates an executable for
+   CodeView and adds a resource.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                     6
+
+II. General PM Program Structure
+
+Every Presentation Manager program has certain fundamental components.
+These necessary elements are contained in the program SKELETON.BAS
+distributed on the disks with this package (the complete listing of
+SKELETON.BAS is contained in Appendix C). For more complete information on
+how to structure a PM program, refer to the book, Programming the OS/2
+Presentation Manager. The components of a PM program are as follows:
+
+               1.   Definition file
+               2.   Initialization section
+               3.   Message loop
+               4.   Window procedure
+               5.   Finalize section
+
+Note: Appendix D diagrams the effects of the functions in SKELETON.BAS.
+
+The following is a description of the PM program components:
+
+1. Definition File
+
+   The first component of a PM program -- or, for that matter, of any OS/2
+   program -- is a definition file. The definition file specifies the name
+   of the program, the type of the program, heapsize, stacksize, and global
+   procedures. The definition file is specified at LINK time, after the
+   libraries. For more complete information on using module definition
+   files, refer to the Microsoft CodeView and Utilities manual. The
+   definition file for SKELETON.BAS is as follows:
+
+   NAME           SKELETON  WINDOWAPI
+   DESCRIPTION    'BASIC Presentation Manager Skeleton Program'
+   PROTMODE
+   HEAPSIZE       1024
+   STACKSIZE      8192
+   EXPORTS        BasClientWndProc
+
+   Note: Every sample program in this package has a corresponding .DEF
+   file.
+
+2. Initialization Section
+
+   In the source file itself, the first section is the initialization
+   section. In this section, an anchor block is set up (WININITIALIZE), a
+   message queue is created (WINCREATEMSGQUEUE), a window class is
+   registered (WINREGISTERCLASS), and a standard window is created
+   (WINCREATESTDWINDOW). The initialization section of SKELETON.BAS is as
+   follows:
+
+   hab& = WinInitialize(0)
+   hmq& = WinCreateMsgQueue(hab&, 0)
+   bool% = WinRegisterClass(hab&,_
+             MakeLong(VARSEG(szClientClass$), SADD(szClientClass$)),_
+             RegBas, 0, 0)
+   hwndFrame& = WinCreateStdWindow (_
+
+
+
+                                     7
+
+             HWNDDESKTOP,_
+             WSVISIBLE,_
+             MakeLong (VARSEG(flFrameFlags&), VARPTR(flFrameFlags&)),_
+             MakeLong (VARSEG(szClientClass$), SADD(szClientClass$)),_
+             0, 0, 0, 0,_
+             MakeLong (VARSEG(hwndClient&), VARPTR(hwndClient&)))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                     8
+
+3. Message Loop
+
+   The second part of every PM program is the message processing loop. This
+   basically consists of two function calls: WINGETMSG and WINDISPATCHMSG.
+   WINGETMSG will succeed (return a nonzero) until a WMQUIT message is
+   received. A WMQUIT is sent whenever you close a standard window, unless
+   you process WMCLOSE. Due to the message-based nature of PM programs, it
+   is imperative to keep this loop minimal. PM requires messages be
+   processed in a short time limit and will give an error message when this
+   limit is reached. (Appendix E shows a message flow chart.) The message
+   loop for SKELETON.BAS is as follows:
+
+   WHILE WinGetMsg(hab&, MakeLong(VARSEG(aqmsg), VARPTR(aqmsg)), 0, 0, 0)
+     bool% = WinDispatchMsg(hab&, MakeLong(VARSEG(aqmsg), VARPTR(aqmsg)))
+   WEND
+
+4. Window Procedure
+
+   The code that actually processes the messages is contained in the
+   function CLIENTWNDPROC. Due to the arbitrary naming convention of the
+   support modules, the name CLIENTWNDPROC& must be used for the window
+   function. Each class of window requires a different window procedure.
+   The support modules allow for 20 other classes for which the functions
+   must be named CLIENTWNDPROC1& through CLIENTWNDPROC20&.
+
+   The preferred structure of a window procedure is a SELECT CASE statement
+   (equivalent to a C switch statement) with CASEs for the messages you
+   want to explicitly handle. For messages you don't want to process,
+   transfer control to the default window procedure, WINDEFWINDOWPROC. The
+   window procedure for SKELETON.BAS is as follows:
+
+   FUNCTION ClientWndProc& (hwnd&, msg%, mp1&, mp2&)
+        DIM ClientRect AS RECTL
+        SELECT CASE msg%
+        CASE WMPAINT     'Paint the window with background color
+           hps&   = WinBeginPaint(hwnd&, 0,_
+                    MakeLong(VARSEG(ClientRect), VARPTR(ClientRect)))
+           bool% = WinFillRect(hps&,_
+                    MakeLong(VARSEG(ClientRect), VARPTR(ClientRect)),0)
+           bool% = WinEndPaint(hps&)
+           ClientWndProc&=0
+        CASE ELSE
+           ClientWndProc& = WinDefWindowProc(hwnd&, msg%, mp1&, mp2&)
+        END SELECT
+   END FUNCTION
+
+5. Finalize Section
+
+   The last part of a PM program is the finalize section. This section is
+   very similar to the initialization section with the order reversed. You
+   start by destroying the window handle (WINDESTROYWINDOW) and the message
+   queue (WINDESTROYMSGQUEUE), then releasing the anchor block
+   (WINTERMINATE). The finalize section for SKELETON.BAS is as follows:
+
+
+
+
+                                     9
+
+   bool% = WinDestroyWindow(hwndFrame&)
+   bool% = WinDestroyMsgQueue(hmq&)
+   bool% = WinTerminate(hab&)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                     10
+
+III. Support Modules
+
+Because of limitations of BASIC, several key functions require the use of
+another language. Included with this package are several routines written
+in assembly language that enable PM programming using BASIC. The functions
+are provided both in source and in the library, REGBAS.LIB. Both C and
+assembly source are provided for the functions. These functions are the
+following:
+
+
+               1.   REGBAS
+
+               2.   BASCLIENTWNDPROC
+
+               3.   MAKELONG
+
+               4.   BREAKLONG
+
+               5.   Hook functions
+
+The following is a description of these functions:
+
+1. REGBAS&
+
+   This function is necessary because BASIC has no facility for returning a
+   pointer to a function. Due to the naming convention of the support
+   module, REGBAS must be used in conjunction with a BASIC function of a
+   predefined name (CLIENTWNDPROC&). REGBAS itself is used as the function
+   pointer parameter in WINREGISTERCLASS, WINSUBCLASSWINDOW, WINCREATEDLG,
+   WINLOADDLG, and WINDLGBOX.
+
+   The support modules allow 20 other separate functions to be registered.
+   This is accomplished by functions named REGBAS1 through REGBAS20, which
+   must have corresponding BASIC functions named CLIENTWNDPROC1& through
+   CLIENTWNDPROC20&, respectively. The extra function declarations (REGBAS1
+   to REGBAS20) have been commented out of the REGBAS.BI INCLUDE file. To
+   activate these functions, remove the comments. Note: Source code is
+   provided for REGBAS and REGBAS1; REGBAS2 through REGBAS20 can be created
+   by modifying the code for REGBAS1.
+
+2. BASCLIENTWNDPROC
+
+   This function, used with REGBAS, is invisible to the BASIC programmer
+   (except it must be put into the .DEF file). Its purpose is to serve as a
+   translator between PM and a BASIC message-handling procedure.
+
+   BASIC and C receive parameters differently in functions. BASIC receives
+   all parameters by reference, whereas C receives by value. Because PM
+   follows the C convention, a BASIC function cannot be directly called by
+   PM. Whenever a BASIC function must be registered with PM, an alternative
+   assembly language routine is registered instead. The assembly routine
+   simply calls the BASIC routine using the BASIC calling convention.
+   REGBAS actually registers the corresponding assembly BASCLIENTWNDPROC
+   function, which calls the BASIC CLIENTWNDPROC function. The
+
+
+
+                                     11
+
+   BASCLIENTWNDPROC functions follow the same naming convention as REGBAS
+   and CLIENTWNDPROC (e.g. BASCLIENTWNDPROC1 to BASCLIENTWNDPROC20).
+
+3. MAKELONG&(BYVAL hiword AS INTEGER, BYVAL loword AS INTEGER)
+
+   This function takes two integer values and combines them to form a long.
+   This is generally used to convert the values returned by VARSEG and
+   VARPTR into a single far address. For variable-length strings, MAKELONG
+   is used with VARSEG and SADD to make the correct address.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                     12
+
+4. BREAKLONG(BYVAL thelong AS LONG, hiword AS INTEGER, loword AS INTEGER)
+
+   The inverse of MAKELONG, this procedure breaks apart a long into two
+   integer values. The first parameter is the long variable to be broken
+   down. The hiwords and lowords are returned in the second and third
+   parameters respectively.
+
+5. Hook Functions
+
+   For reasons similar to REGBAS, assembly language hook routines are
+   needed to register the BASIC hook processing functions. Any of the hook
+   functions listed below can be used for the function pointer parameter
+   for WINSETHOOK and WINRELEASEHOOK. For each of the four hook functions,
+   there are two assembly language routines that correspond to REGBAS and
+   BASCLIENTWNDPROC in functionality. These are the following:
+
+   a. Input Hook -- REGINPUTHOOK, BASINPUTHOOK
+
+   b. Send-Message Hook -- REGSENDMSGHOOK, BASSENDMSGHOOK
+
+   c. Message-Filter Hook -- REGMSGFILTERHOOK, BASMSGFILTERHOOK
+
+   d. Help Hook -- REGHELPHOOK, BASHELPHOOK
+
+   Each of the above hooks has a corresponding BASIC function that needs to
+   be in your source code. The naming convention is the same as the
+   BASCLIENTWNDPROC and CLIENTWNDPROC. The BASIC functions are named
+   similarly to the assembly functions without the "REG" or "BAS". For
+   example, a help hook procedure would be as follows:
+
+   FUNCTION HelpHook% (hab&, usMode%, idTopic%, idSubTop%, prcPos AS RECTL)
+   ...
+   END FUNCTION
+
+   The parameters for the various hook procedures are discussed in Chapter
+   28 of the OS/2 Programmer's Reference, Volume 1.
+
+   Because a BASIC program cannot be put in a DLL, system hooks cannot be
+   installed (a system hook must reside in a DLL). These hooks can only be
+   used as application hooks.
+
+   The journal hook functions can be only system hooks; if needed, the code
+   supplied for the other hook routines can be modified and installed in a
+   DLL. Because BASIC does not directly support installing these routines
+   in DLLs, these would be better implemented using a C program. The two
+   types of journal hooks are journal-record hook and journal-playback
+   hook.
+
+
+
+
+
+
+
+
+
+
+                                     13
+
+IV. Utility Routines
+
+Several utility routines have been provided with this package. These
+routines are written in BASIC and facilitate certain programming tasks,
+such as character I/O. The following routines are in the UTILITY directory:
+
+
+               1.   WINCLS / WINRESETSTDIO
+
+               2.   WINPRINT / WINPRINTS
+
+               3.   KEYMSG
+
+               4.   WININKEY$
+
+               5.   WININPUT%
+
+               6.   WINLOCATE
+
+               7.   WINPOS
+
+               8.   WINCSRLIN
+
+               9.   IEEETOFIXED / FIXEDTOIEEE
+
+The following is a description of these routines:
+
+1. WINCLS / WINRESETSTDIO(hwnd AS LONG, hps AS LONG)
+
+   These routines reset the position to the upper-left corner of the
+   window. WINCLS erases the window while WINRESETSTDIO resets position
+   without erasing. WINRESETSTDIO is particularly useful to eliminate
+   flashing from WININPUT. These routines are in the WINSTDIO.BAS file in
+   the UTILITY directory.
+
+2. WINPRINT / WINPRINTS(hps AS LONG, pString AS STRING)
+
+   These routines print the string (pString) at the current location. The
+   difference between WINPRINT and WINPRINTS is WINPRINT simulates a CR/LF
+   while WinPrintS acts as if a semicolon had been on a BASIC PRINT
+   statement. These routines are in the WINSTDIO.BAS file in the UTILITY
+   directory.
+
+3. KEYMSG(hwnd AS LONG, mp1 AS LONG, mp2 AS LONG)
+
+   KEYMSG is a simple SUBprogram to be used in a WMCHAR message to place
+   keystrokes in a keyboard buffer. The characters placed here are
+   retrievable using WININKEY$ or WININPUT% functions. This SUB sends a
+   WMPAINT message to trigger any active WININPUTs. This routine is in the
+   WINSTDIO.BAS file in the UTILITY directory.
+
+4. WININKEY$()
+
+
+
+
+
+                                     14
+
+   WININKEY$ works essentially like the BASIC INKEY$ function. The
+   characters must first be buffered with KEYMSG. This routine is in the
+   WINSTDIO.BAS file in the UTILITY directory.
+
+     
+      Warning: Because characters must first be buffered with KEYMSG,
+      the common WHILE INKEY$=""...WEND cannot be used. WININKEY$
+      must be checked; then control must be passed back to the
+      message loop.
+     
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                     15
+
+5. WININPUT%(hps AS LONG, prompt AS STRING, var AS STRING)
+
+   WININPUT displays the prompt$ and inputs characters until a carriage
+   return and stores these characters in var$.
+
+   If there is no CR in the current buffer, the function returns 0. This
+   means the input is still active. The next time this WININPUT is called,
+   the new input is concatenated onto the previous input. This should be
+   used in a WMPAINT message. This routine is in the WINSTDIO.BAS file in
+   the UTILITY directory.
+
+6. WINLOCATE(hwnd AS LONG, hps AS LONG, row AS INTEGER, col AS INTEGER)
+
+   WINLOCATE will go to a row and column based on the current character
+   size. This is mainly used when converting old BASIC programs; for exact
+   pixel positioning, GPIMOVE should be used. This routine is in the
+   WINSTDIO.BAS file in the UTILITY directory.
+
+7. WINPOS%(hps AS LONG)
+
+   WINPOS returns the current horizontal position of the cursor, based on
+   the current character size. This routine is in the WINSTDIO.BAS file in
+   the UTILITY directory.
+
+8. WINCSRLIN%(hwnd AS LONG, hps AS LONG)
+
+   WINCSRLIN returns the current line (row) position of the cursor, based
+   on the current character size. This routine is in the WINSTDIO.BAS file
+   in the UTILITY directory.
+
+9. IEEETOFIXED&(float AS DOUBLE) / FIXEDTOIEEE#(fixed AS LONG)
+
+   These routines are used to convert between floating-point variables
+   (IEEE) and the special 32-bit fixed-point value used by several PM
+   functions. These functions are just 16-bit shifts. Basically, the
+   conversion is done by multiplying and dividing by 2^16 (&H10000). These
+   routines are in the FIXED.BAS file in the UTILITY directory.
+
+     
+      Note: Because of the dynamic nature of this application note,
+      there may be further utility routines contained on the disks;
+      if there are, there will be a file called UTILITY.DOC on the
+      disk that documents these routines.
+     
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                     16
+
+V. Enhancing Existing BASIC Programs
+
+There are two main reasons to enhance existing BASIC programs to use the
+Presentation Manager. One reason is that the GPI calls provide access to
+advanced, device-independent graphics.  Another reason is that PM provides
+a standard user interface using pull-down menus, dialog boxes, and full
+mouse support.
+
+For applications that would not benefit from either PM's interface or
+access to its libraries of graphic routines, there are no compelling
+reasons to convert them to run under PM. Likewise, for a large OS/2
+application that needs access to the GPI routines, it might not be feasible
+to convert the entire application over to the PM interface.
+
+For any program to gain access to the PM functions, some changes to the
+program structure will be needed. The difficulty in converting a program is
+tied to several factors related to the structure and functionality of the
+program. In general, a well structured, modular program will be much easier
+to convert than one not using modular programming practices. The actual
+process of converting an existing PM program is outlined on the following
+pages. Besides the addition of the minimum PM program shell to the program
+(the routines in SKELETON.BAS), there are several major areas that need to
+be addressed in the conversion process:
+
+
+               1.   User Input/Output
+
+               2.   Graphics
+
+               3.   Long Processing Loops
+
+               4.   Standard Key Combinations
+
+The following is a description of these areas:
+
+1. User Input/Output
+
+   The standard BASIC user I/O routines, such as PRINT and INPUT, do not
+   work under PM. To ease conversion, several utility routines are supplied
+   with this package to take their place (see Section IV, Utility
+   Routines). Although these routines help the conversion process, there
+   will still need to be some modification of the program flow to take
+   advantage of these routines.
+
+2. Graphics
+
+   Any graphics that the program does using the standard BASIC graphic
+   routines (CIRCLE, LINE, etc.) will need to be changed to use a
+   corresponding GPI routine.
+
+3. Long Processing Loops
+
+   Because all PM programs are based on message passing, a program
+   shouldn't be tied up in a large processing loop. Any procedure should
+
+
+
+                                     17
+
+   quickly pass control back to PM. If any procedure would take a long time
+   to complete, it should either be restructured to take less time, or some
+   alternative method of processing should be found. Chapter 17 of
+   Programming the OS/2 Presentation Manager lists several ways to work
+   around large processing loops.
+
+4. Standard Key Combinations
+
+   Even though some applications will not use the entire PM interface, some
+   consistency should be maintained with other PM applications; otherwise,
+   the benefits of a consistent user interface are lost. This means that
+   the program should not intercept any standard PM keystrokes (such as F1
+   for help) and use them for some other purpose.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                     18
+
+Enhancing a BASIC program to utilize PM functions is a two step conversion.
+The first step moves the application to PM using essentially the same user
+interface; this allows the application access to GPI functions.  The second
+step of the conversion brings the application to a full PM user interface
+with pull-down menus and dialog boxes.
+
+The conversion process outlined below is based on CAL.BAS found in the
+EXIST2PM directory on the disks. The sections that are changed are in
+Appendix G: CAL.BAS Conversion. The complete files are on the disks.
+
+The first step in moving from a standard BASIC program is incorporating the
+SKELETON.BAS shell program. To do this, merge the two files, place
+initialization code at the beginning of SKELETON.BAS, and move the main
+processing to the CLIENTWNDPROC. To move the main processing to the
+CLIENTWNDPROC, it will probably be necessary to work some logic to control
+the flow. In CAL.BAS, a local variable (InputIndex%) is used to indicate
+the current stage of the I/O. The CLIENTWNDPROC for the intermediate stage
+of CAL.BAS is as follows:
+
+FUNCTION ClientWndProc& (hwnd&, msg%, mp1&, mp2&) STATIC
+  DIM ClientRect AS RECTL
+  ClientWndProc&=0
+  SELECT CASE msg%
+  CASE WMCHAR         'Buffer characters
+     CALL KeyMsg(hwnd&, mp1&, mp2&)
+  CASE WMPAINT
+     hps& = WinBeginPaint(hwnd&, 0,_
+            MakeLong(VARSEG(ClientRect), VARPTR(ClientRect)))
+     BeginInput:
+     IF InputIndex% = 0 THEN    'Input Year
+       CALL WinCLS(hwnd&, hps&)
+       Year = GetInput(hwnd&, hps&, "Year (1899 to 2099): ", 1, 1899, 2099)
+       IF Year <> 0 THEN InputIndex% = InputIndex% + 1
+     END IF
+     IF InputIndex% = 1 THEN    'Input Month
+         Month = GetInput(hwnd&, hps&, "Month (1 to 12): ", 2, 1, 12)
+         IF Month <> 0 THEN InputIndex% = InputIndex% + 1
+     END IF
+     IF InputIndex% = 2 THEN     'Print Calendar
+         PrintCalendar hwnd&, hps&, Year, Month
+         InputIndex% = InputIndex% + 1
+     END IF
+     IF InputIndex% = 3 THEN     'Ask for another date
+         WinLocate hwnd&, hps&, 13, 1       ' Locate in 13th row, 1st col
+               WinPrintS hps&, "New Date? " ' Keep cursor on same line
+               Resp$ = WinInkey$            ' Wait for a key press
+               IF Resp$ <> "" THEN WinPrint hps&, Resp$ ' Print the key
+               IF (UCASE$(Resp$)="Y") THEN
+                  InputIndex% = 0
+                  GOTO BeginInput        'If another date, display prompt
+               ELSEIF Resp$ <> "" THEN
+                  bool% = WinSendMsg(hwnd&, WMCLOSE, 0, 0)
+               END IF
+           END IF
+
+
+
+                                     19
+
+        bool% = WinEndPaint(hps&)
+     END SELECT
+END FUNCTION
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                     20
+
+After the structure of the program has been changed, the second step in
+converting BASIC programs to PM is changing the standard input and graphics
+to PM. The utility routines in WINSTDIO.BAS are provided to expedite
+standard I/O conversion (see Section IV, Utility Routines). Although there
+are no graphics in CAL.BAS, the routine below is the GetInput function from
+the transition version of CAL.BAS:
+
+FUNCTION GetInput (hwnd&, hps&, Prompt$, Row, LowVal, HighVal) STATIC
+
+   ' Locate prompt at specified row, turn cursor on and
+   ' make it one character high:
+   WinLocate hwnd&, hps&, Row, 1
+   WinPrintS hps&, Prompt$
+
+   ' Save column position:
+   Column = WinPos(hps&)
+
+   ' Input value until it's within range:
+   WinLocate hwnd&, hps&, Row, Column   ' Locate cursor at end of prompt
+   WinPrint hps&, SPACE$(10)     ' Erase anything already there
+   WinLocate hwnd&, hps&, Row, Column   ' Relocate cursor at end of prompt
+   done% = WinInput(hps&, "", GetVal$)     ' Input value with no prompt
+   IF done% THEN
+     Value = VAL(GetVal$)
+     GetVal$ = ""
+   END IF
+   IF (Value < LowVal) OR (Value > HighVal) THEN done% = 0
+
+   ' Return valid input as value of function:
+   IF done% THEN
+     GetInput = Value
+   ELSE
+     GetInput = 0
+   END IF
+END FUNCTION
+
+The final step in converting to a PM program is utilizing some of the more
+advanced features of PM such as dialog boxes and menus. These are mainly
+used to replace the input routines used in the transition step. Usually
+this requires using resources and the resource compiler (see Section VIII,
+Resources). For an example of a fully converted PM application, see CAL.BAS
+in the EXIST2PM\CAL\PM directory.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                     21
+
+VI. Examples
+
+There is a variety of examples shipped with this package. Each category of
+example is in a different directory on the disk. Actual directory listings
+are not provided so that new programs can easily be added later. The
+categories (and directory names) are as follows:
+
+
+               1.   FUNCTION
+
+               2.   PMDEMOS
+
+               3.   EXIST2PM
+
+               4.   WELCOME
+
+Note: Every sample program has a corresponding .DEF file.
+
+The following is a description of these categories:
+
+1. FUNCTION
+
+   Each program in the FUNCTION directory has the same name (with a .BAS
+   extension) as an INCLUDE file and illustrates the major functions
+   contained in this INCLUDE file. Since some functions do not cause a
+   visible difference, some information is written to a file with an .OUT
+   extension. Some functions are not demonstrated at all, either because of
+   their simplicity or the rarity of their use. The functions in
+   WINMAN1.BI, WINMAN2.BI, and GPICONT.BI are not demonstrated because the
+   generality of the functions prevents a single coherent program example.
+
+2. PMDEMOS
+
+   The programs in the PMDEMOS directory are meant to illustrate features
+   of the Presentation Manager. The programs provide some examples of how
+   large PM programs are structured.
+
+3. EXIST2PM
+
+   The programs in the EXIST2PM directory are examples of how to add a PM
+   interface onto existing BASIC programs. These programs are provided as a
+   guide to incorporating PM features into standard BASIC programs. For
+   more information on adding a PM interface to an existing BASIC program,
+   see Section V, Enhancing Existing BASIC Programs.
+
+4. WELCOME
+
+   The series of programs provided in the Welcome directory are equivalent
+   to the C programs in the second and third chapters of Programming the
+   OS/2 Presentation Manager. These programs are meant to be used in
+   conjunction with this book to help develop an understanding of PM
+   programming.
+
+
+
+
+
+                                     22
+
+VII. Limitations
+
+Although this package describes how to do Presentation Manager programming
+in BASIC, there are several aspects of the BASIC language that limit which
+PM functions can be used, as follows:
+
+
+               1.   Function Pointers Require Assembly Interface
+
+               2.   No CHAR Functions and Parameters
+
+               3.   No Multithreaded Programs
+
+               4.   Problems with DDE and Semaphores
+
+               5.   Limited Compiler Workspace
+
+               6.   No DLLs
+
+               7.   No Device Monitors
+
+The following is a description of these limitations
+
+1. Function Pointers Require Assembly Interface
+
+   Several PM calls, including WINREGISTERCLASS, require the address of a
+   function. BASIC, however, has no facility for returning the address of a
+   function. This can be solved by calling an assembly language function
+   that returns the address of a predefined BASIC function. In this
+   package, the REGBAS assembly language procedures do this (see Section
+   III, Support Modules).
+
+2. No CHAR Functions and Parameters
+
+   A CHAR is a single-byte value of which there is no equivalent in BASIC.
+   There are several PM functions that either return a CHAR or require a
+   CHAR as a parameter; these functions are not supported and cannot be
+   called. In the BASIC INCLUDE files supplied with this package, any
+   functions that use CHARs are commented out.
+
+3. No Multithreaded Programs
+
+   The BASIC run time is not reentrant, and multithreaded programming is
+   not supported. Any PM calls that deal with multithreaded code have been
+   commented out.
+
+   Because multithreaded programming is not supported, problems can arise
+   when a program has a lengthy processing loop. Generally a C program
+   would spawn a thread to deal with a process that will take some time to
+   complete; since this is not possible in BASIC, alternative methods must
+   be used. Several such methods are described in Chapter 17 of Programming
+   the OS/2 Presentation Manager.
+
+
+
+
+
+                                     23
+
+4. Problems with DDE and Semaphores
+
+   Because of the memory management that BASIC does, variables are
+   frequently rearranged in memory. This is different from most other
+   languages in which variables occupy static memory locations. Because of
+   this, there could be problems using the DDE (dynamic data exchange) and
+   semaphore routines in PM.
+
+   In both semaphores and DDE, two or more programs access a common area of
+   memory. Because this area of memory must not be moved by either program,
+   BASIC's memory management could create problems. The routines that deal
+   with semaphores and DDE have been converted and left in the INCLUDE
+   files provided with this package, but you should be aware of possible
+   problems with using these routines.
+
+5. Limited Compiler Workspace
+
+   The BASIC compiler has a smaller compiler workspace than the C compiler
+   does. This creates a limit on the number of PM functions that may be
+   declared in a single BASIC module. Because of this, several of the
+   converted C header files had to be broken up into smaller BASIC INCLUDE
+   files (see Appendix H: Header to INCLUDE Directory).
+
+   Please note that this limitation is one that will be encountered in
+   developing most PM applications with BASIC. When you have included too
+   many files, the compiler error "Out of Memory" will occur (see Section
+   IX, Troubleshooting).
+
+6. No DLLs
+
+   Dynamic Link Libraries (DLLs) cannot be created with the BASIC compiler.
+   However, a protected-mode BASIC program can invoke routines contained in
+   DLLs. Because the BASIC compiler cannot create DLLs, system hooks cannot
+   be implemented by a BASIC program.
+
+7. No Device Monitors
+
+   Device Monitors cannot be created with the BASIC compiler. Such a
+   routine should be implemented in another language such as C or assembly.
+
+     
+      Note: Because of these limitations, designing a full scale PM
+      program using the BASIC language is not recommended. Rather,
+      this package is provided to allow BASIC programmers to utilize
+      PM calls to improve their existing programs. It is advised that
+      the C language be used in the design of large PM applications.
+     
+
+
+
+
+
+
+
+
+
+
+                                     24
+
+VIII. Resources
+
+This section gives a brief overview of resources. For more information on
+resources and the resource compiler, see the OS/2 Programmer's Reference
+(three volumes) and the OS/2 Presentation Manager Softset Tools manual.
+Chapter 7 of the Softset Tools guide is devoted to the resource compiler
+(RC).
+
+Resources are read-only data segments that are stored in a program's .EXE
+file but that are not part of the program's normal code and data segments.
+Resources give you an easy way to create dialog boxes, menus, and other
+controls. Resources also give you easier methods of loading graphical
+images such as bitmaps, icons, and pointers.
+
+Although it is possible to create resources in any data segment, it is much
+easier to create them using the resource compiler. To do this, you must
+first create a resource definition file. The format of these resource
+definition files is based on C or Pascal syntax. For example, the following
+is the resource definition file (using C syntax) for WINACCEL.BAS in the
+FUNCTION directory:
+
+   #define ID_RESOURCE 1        /* Constants for Menu definition */
+   #define IDM_BEEP    2
+   #define IDM_BEEP1   3
+   #define IDM_BEEP2   4
+   #define IDM_BEEP3   5
+   #define IDM_EXIT    6
+   #define IDM_BYE     7
+   #define ID_ACCEL    8
+   MENU ID_RESOURCE
+         {
+         SUBMENU "~Beep", IDM_BEEP
+              {
+                  MENUITEM "Beep ~1 (CTRL 1)",   IDM_BEEP1
+                  MENUITEM "Beep ~2 (CTRL 2)",   IDM_BEEP2
+                  MENUITEM "Beep ~3 (CTRL 3)",   IDM_BEEP3
+              }
+         SUBMENU "~Exit", IDM_EXIT
+              {
+              MENUITEM "Good ~Bye",   IDM_BYE
+              }
+         }
+   
+   ACCELTABLE ID_ACCEL
+         {
+         "1", IDM_BEEP1, CONTROL
+         "2", IDM_BEEP2, CONTROL
+         "3", IDM_BEEP3, CONTROL
+         }
+   
+Creating resources in a data segment is possible, but in most cases, the
+only reasonable method of doing this requires variant records, which are
+not supported by BASIC (see Section VII, Limitations). For an example of
+
+
+
+
+                                     25
+
+creating a simple resource (an accelerator table) in a data segment, see
+WINACCEL.BAS in the FUNCTION directory.
+
+For more integrated uses of resources, see the sample programs in the
+PMDEMOS directory.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                     26
+
+IX. Troubleshooting
+
+This section covers topics related to debugging PM programs created with
+this package. The following topics are covered in this section:
+
+               1.   Compiler Errors
+               2.   Linker Errors
+               3.   Resource Compiler Errors
+               4.   Run-Time Errors
+               5.   Debugging Techniques
+               6.   Other Problems
+
+The following is a more detailed discussion of these debugging issues:
+
+1. Compiler Errors
+
+   "Array Not Dimensioned"
+   
+   This error is usually caused by not declaring a function. Check which
+   INCLUDE should be used. The help files provided on the disks make this
+   search easier (see Appendix B: Help Files).
+
+   "Duplicate Definition"
+   
+   This error is usually caused by including the same file twice. This may
+   happen because PMBASE.BI includes WINGEN.BI and REGBAS.BI.
+
+   "INCLUDE File Not Found"
+   
+   This error is caused by not specifying the full path for INCLUDE files
+   or by not compiling in the directory containing the INCLUDE files
+   needed. Note: BASIC compilers 6.00 and 6.00b do not use the INCLUDE
+   environment variable to search for INCLUDE files.
+
+   "Out of Memory"
+   
+   This error is caused by exceeding compiler workspace (see Section VII,
+   Limitations). The most common cause of this is that too many symbols
+   (constants, functions, types, etc.) are defined. This occurs when many
+   INCLUDE files are included in one module. To correct this problem,
+   either modularize the program so that each module contains fewer
+   symbols, or extract the symbols from the INCLUDE files and place them
+   directly in the code (and do not include the file).
+
+   "Type Not Defined"
+   
+   This error occurs when a TYPE is referenced that has not been defined.
+   Please note that some INCLUDE files require others be included first for
+   common types (e.g. POINTL from OS2DEF.BI). The files needed for each
+   INCLUDE are listed in the banner comment for that INCLUDE.
+
+
+
+
+
+
+
+                                     27
+
+     
+      Note: Undefined constants and undeclared single-parameter
+      functions (such as REGBAS1 through REGBAS20) are not flagged by
+      the BASIC compiler Version 6.00 or 6.00b. This is due to the
+      fact that BASIC allows you to create variables without first
+      dimensioning them. The compiler assumes that the undefined
+      constants are variables whose initial value is 0 (zero).
+     
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                     28
+
+2. Linker Errors
+
+   "No Stack Segment"
+   
+   This error occurs when the definition file (.DEF) is not specified in
+   the LINK command line.
+
+   "Symbol Defined More Than Once" or "Multiple Definitions For Input
+   Internal Name"
+   
+   These warnings occur when using routines defined in two places. One
+   common case of this is the API functions that are defined in both the
+   OS2.LIB that comes with the PM Toolkit and the BASIC libraries. The
+   warnings are generally harmless and can be eliminated by using the /NOE
+   linker switch.
+
+   "Unresolved Externals"
+   
+   This error has two main causes related to this package:
+
+   a. If REGBAS, MAKELONG, and BREAKLONG are the cited routines, the
+      problem is that REGBAS.LIB is not specified on the LINK command line.
+
+   b. If CLIENTWNDPROCX is the cited routine, either remove the DECLARE
+      FUNCTION RegBasX line from the code or define a FUNCTION
+      ClientWndProcX ... END FUNCTION block.
+
+   Any other LINK error
+   
+   Some errors may occur if the wrong version of the linker is used. Make
+   certain the correct version of the linker is being used. The linker
+   version is displayed whenever you link a file.
+
+3. Resource Compiler Errors
+
+   "Copy of file.$$$ To file.EXE Failed"
+   
+   This error can occur if the .EXE file is being executed (or otherwise
+   locked) while the resource is being added. This error could also occur
+   if there is insufficient disk space to increase the .EXE file size by
+   the size of the resource.
+
+4. Run-Time Errors
+
+   "Protection Violation" or "Segmentation Violation"
+   
+   These are the errors that PM will usually return in a variety of errant
+   cases. "Protection Violation" is the error you get in normal execution;
+   "Segmentation Violation" is usually received in CodeView. The following
+   are common causes of these errors:
+
+   a. BASCLIENTWNDPROCX not listed in .DEF file. All routines that are
+      called from .DLLs must be listed in the .DEF file under EXPORTS.
+
+
+
+
+                                     29
+
+   b. Invalid address. If your program tries to access an invalid address,
+      this error will occur.
+
+   c. Direct hardware access. OS/2's ringed architecture does not allow
+      direct hardware access.
+
+     
+      Note: Normal BASIC run-time errors are not trapped by PM. To
+      check for these types of errors, use BASIC's ON ERROR
+      statement.
+     
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                     30
+
+5. Debugging Techniques
+
+   The best debugging tool available at this time is CodeView. This will
+   allow you to step through your program and view return values easily. In
+   troubleshooting any problem, CodeView should be extensively used.
+
+   There are several other things to note about debugging a PM program.
+   Virtually all PM functions return 0 (zero) if an error has occurred. To
+   find the error, use the WINGETLASTERROR to find the error ID. This error
+   ID is used by looking for the hexadecimal value (HEX$) of the low word
+   of the ID in the back of OS/2 Programmer's Reference, Volume 2. For
+   example, if WINGETLASTERROR returns 270497, with a hexadecimal
+   equivalent 420A1, the error ID is 20A1. This error is listed in OS/2
+   Programmer's Reference as PMERR_INV_MICROPS_FUNCTION, which means the
+   function is not allowed in a micro presentation space. If a function
+   causes an error, one useful debugging step is to print out the
+   parameters before the call to verify that the values are correct.
+
+   Since printing to a window is more involved in PM than in a normal BASIC
+   program, it may be easier to write debugging information to a file
+   instead of the screen. This method is used in most of the programs in
+   the FUNCTION directory on the disks.
+
+   If the above troubleshooting steps do not clear up the problem, the next
+   step is to simplify the problem. Two good ways to do this are to either
+   find an example that does something similar and modify that, or start
+   from SKELETON.BAS and add in the minimum amount of code necessary to
+   reproduce the problem.
+
+6. Other Problems
+
+   There are several other potential problems that are noteworthy. These
+   are either points of possible confusion or problems encountered during
+   development.
+
+   One common mistake is leaving out constants. As was stated earlier, the
+   compiler does not flag undefined constants, but rather treats them as
+   variables with value 0 (zero).  Passing a zero where a nonzero is
+   expected will cause most functions to fail. Thus, it is important to
+   verify that all functions are defined. The help files provided with this
+   package facilitate searching for symbols (see Appendix B: Help Files).
+
+   Another point of possible confusion is passing strings to the PM
+   functions. To pass the address of a variable length string, you must use
+   VARSEG and SADD with MAKELONG instead of VARSEG and VARPTR, which is
+   used for other types. In addition, it is necessary to concatenate a null
+   character (CHR$(0)) on the end of the BASIC strings. C strings are
+   automatically nullterminated. Another point to realize about C strings
+   is that literal strings passed from C to PM are actually passing the
+   address of that string. In BASIC, it is necessary to use MAKELONG with
+   VARSEG and SADD.
+
+   When working from a windowed command prompt, it may be necessary to run
+   MARKEXE (which comes with OS/2) to make the compiler or linker window
+
+
+
+                                     31
+
+   compatible. If this isn't done, the compiler and linker will switch to a
+   full screen prompt and errors will not be visible after compiling or
+   linking.
+
+   One major problem that has been encountered during development is
+   inconsistent results using global variables. These problems usually
+   surface when using an unnamed COMMON SHARED block. They also
+   occasionally occur with the SHARED statements. The named COMMON SHARED
+   statement has worked in all cases to date. For example, the following
+   named COMMON SHARED statement is used in GPISEG.BAS to share the anchor
+   block and presentation space handles:
+
+   COMMON SHARED /Handles/ hab&, hps&
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                     32
+
+X. INCLUDE File Conversion Process
+
+Note: This section outlines the conversion process from C header
+files to BASIC INCLUDE files. This section assumes you are familiar
+with the C language. This section is for your information only,
+since converted files are already provided.
+
+The C header files provided with the Softset and Toolkit use a
+special naming convention in which the name of a type describes its
+functionality. For example, the pointer and handle types are
+identified by the first character of each type: P for pointers and
+H for handles. This naming convention allows types to be identified
+easily for the conversion to BASIC.
+
+The INCLUDE files contained in this package are based on the C
+header files that come with the OS/2 Presentation Manager Softset
+and Toolkit. The function and structure conversion process is
+outlined on the following pages, but the fundamental types must
+first be converted from C types to BASIC types. All the C types,
+except structures, can be converted to three types in BASIC: STRING
+* 1, INTEGER, and LONG.
+
+1. STRING * 1
+
+   The STRING * 1 type is rarely usable. This type can only be used
+   in TYPE ... END TYPEs converted from C structures containing
+   CHAR, UCHAR, or BYTE elements. Since BASIC can neither pass
+   single byte parameters by value (using the BYVAL keyword) nor
+   return single byte FUNCTION values, all functions in either of
+   these categories have been commented out.
+
+2. INTEGER
+
+   The INTEGER type is the most straightforward. The C types that
+   correspond to INTEGERs are INT, SHORT, USHORT, BOOL, and
+   HMODULE. (Note: HMODULE is an exception to the naming convention
+   explained above.)
+
+3. LONG
+
+   The LONG is basically the catchall type. Besides the obvious C
+   types of LONG and ULONG, all pointers and handles are converted
+   to LONGs. For consistency, the LONG type was chosen for the
+   pointers instead of the segment and offset convention. To pass
+   pointers to data items, you will need to use the MAKELONG
+   function that comes with this package in conjunction with the
+   VARSEG and VARPTR functions built into BASIC. (Note: VARSEG and
+   SADD should be used in conjunction with MAKELONG when
+   referencing variable-length strings.) In addition to these
+   standard types, many miscellaneous types (e.g. MPARAM) fall into
+   the LONG category.
+
+Due to the limitation of BASIC's compiler workspace, the converted
+header files must be split into smaller INCLUDE files. The smaller
+
+
+
+                                 33
+
+header files such as PMSHL.H (9K) do not need further division, but
+PMWIN.H (78K) and PMGPI.H (55K) each need to be divided. The
+INCLUDE files that come with this package are divided on the basis
+of function operation. A list of the INCLUDE files and
+corresponding header files is contained in Appendix H and on the
+INCLUDE.DOC file on the disks. For an alphabetized index of symbols
+(functions, constants, and types) and INCLUDEs, see INDEX.DOC in
+the INCLUDE directory on the disk and in the help files (see
+Appendix B: Help Files).
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                 34
+
+After the types are set, the conversion of the functions,
+constants, and structures begins. The steps for this are as
+follows:
+
+1. Remove macros and "#ifdef"s since BASIC does not support these.
+
+2. For comments, do the following:
+
+   a. Change the open comments from "/*" to an apostrophe, and
+      remove the closing "*/".
+
+   b. Place an apostrophe on each line of multiline comment.
+
+      C:                  |  BASIC:
+      /* This is a        |  ' This is a
+         multiline comment */ |  ' multiline comment
+
+3. For constants, do the following:
+
+   a. Change "#define" to "CONST".
+
+   b. Remove underscores from constant names.
+
+   c. Change "0x" to "&H" for hexadecimal values.
+
+   d. Change trailing "L"s to "&"s to indicate longs where
+      necessary.
+
+   e. Add equal signs between constant name and value.
+
+   f. Note: Byte constants are not possible; comment them out.
+
+      #define A_LONG 0x01L    |  CONST ALONG = &H01&
+      #define A_BYTE 27   |  'byte const C name: A_BYTE, value:27
+
+4. For structures, do the following:
+
+   a. Change "typedef struct <type name> {" to "TYPE <type name>".
+
+   b. Remove underscores from type names.
+
+   c. Change C format <type> <elem> to BASIC format <elem> AS
+      <type>.
+
+   d. For any array types, change to <elem>0 .. <elem>n-1.
+
+   e. Change "}" (to mark end of structure) to "END TYPE".
+
+      typedef struct A_STRUCT {    |  TYPE ASTRUCT
+        int   elem1       |    elem1 AS INTEGER
+        pvoid elem2       |    elem2 AS LONG
+        char  elem3[2]    |    elem30 AS STRING * 1
+      }                   |    elem31 AS STRING * 1
+                          |  END TYPE
+
+
+
+                                 35
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                 36
+
+5. For functions, do the following:
+
+   a. Place "DECLARE FUNCTION" on each function line.
+
+   b. Remove type from before the function name and add the
+      appropriate suffix (& or %).
+
+   c. Change the param format from <type> <par> to "BYVAL <par> AS
+      <type>". If no <par> name is given, use C type name or slight
+      variation.
+
+   d. Place an underscore at end of each continued line.
+
+      BOOL AFunc(    |  DECLARE FUNCTION AFunc%(_
+                 int p1, |                   BYVAL p1 AS INTEGER,_
+                 HMODULE,     |                   BYVAL HMODULE AS
+      LONG,_
+                 LONG)   |                   BYVAL aLONG AS LONG)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                 37
+
+XI. Tips on Reading and Converting C Code
+
+There are several reasons why some knowledge of C is required to
+learn and work with Presentation Manager programming:
+
+
+               1.   Available documentation is geared toward C.
+
+               2.   The resource compiler uses C-like syntax.
+
+The following is a more detailed discussion of these reasons:
+
+1. Available documentation is geared toward C.
+
+   The OS/2 programmer's references are written for C; all of the
+   program examples contained in the references are in C. Most of
+   the other Presentation Manager programming books currently
+   available use C code.
+
+2. The resource compiler uses C-like syntax.
+
+   The resource compiler is based on the C language. Any coding of
+   resource files is done in a C-like syntax; thus, knowledge of C
+   is quite helpful when working with these files.
+
+When converting C code examples to BASIC, there are several common
+mistakes and pitfalls to avoid:
+
+
+               1.   String literals can't be used in function
+
+               calls.
+
+               2.   C strings are NULL terminated.
+
+               3.   Division of integers in C is integer divide in
+
+               BASIC.
+
+               4.   In a C switch statement, case can fall through.
+
+               5.   Slashes denote formatting characters in C.
+
+The following is a more detailed discussion of these mistakes:
+
+1. String literals can't be used in function calls.
+
+   Many of the function calls in C have string literals passed as
+   parameters because all C strings, including literals, are
+   pointers (addresses) to NULL terminated character strings.
+   Because two function calls have to be made in BASIC (VARSEG,
+   VARPTR) to get the string address, the string must first be
+   assigned to a variable.
+
+
+
+
+                                 38
+
+   In C, the following function call is valid:
+
+   cfunc("This is the string");
+
+   In BASIC, this must be converted to two separate statements:
+
+   temp$ = "This is the string" + CHR$(0)
+   CALL cfunc(MakeLong(VARSEG(temp$), SADD(temp$)))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                 39
+
+2. C strings are NULL terminated.
+
+   When converting C string literals to BASIC, a NULL character
+   (CHR$(0)) must be appended to the end of the string. In C, all
+   strings are terminated by an ASCII NULL.
+
+3. Division of integers in C is integer divide in BASIC.
+
+   When two integers are divided in C, a normal BASIC division (/)
+   is not equivalent. Instead, an integer divide (\) should be used
+   for correct results.
+
+4. In a C switch statement, case can fall through.
+
+   The C switch construct is very similar to BASIC's SELECT CASE.
+   In C, however, if a break statement is not between case clauses,
+   program execution will fall through and continue into the code
+   for the next case. For example, the C routine
+
+   switch (msg) {
+      case 1:
+         program-line-1;
+      case 2:
+         program-line-2;
+         break;
+      case 3:
+         program-line-3;
+   }
+   
+   converts to BASIC as the following:
+
+   SELECT CASE
+      CASE 1
+         program-line-1
+         program-line-2
+      CASE 2
+         program-line-2
+      CASE 3
+         program-line-3
+   END SELECT
+
+5. Slashes denote formatting characters in C.
+
+   In string literals, slashes (\) have special meaning. The slash
+   modifies the character following it to create a special ASCII
+   character. Thus, a C string of "\\filename" is converted to
+   "\filename" in BASIC. A listing of these literals and their
+   BASIC equivalents is given in Appendix I: Reading C Code.
+
+While this application note can't teach C programming, several tips
+on reading and converting C code to BASIC are presented in Appendix
+I: Reading C Code.
+
+
+
+
+
+                                 40
+
+XII. References
+
+This package requires software and documentation provided with the
+Microsoft OS/2 Presentation Manager Toolkit. The Toolkit contains
+the OS/2 Programmer's Reference, Programming the OS/2 Presentation
+Manager, and the QuickHelp listed below. In addition, a variety of
+sample programs (in C) are provided with the Toolkit. The product,
+Microsoft OS/2 Presentation Manager Softset, is a subset of the
+Toolkit. The Softset contains the libraries, C header files, and
+utilities, but no documentation or source code. These products are
+available from Microsoft Consumer Response at (800) 426-9400.
+
+The OS/2 Presentation Manager Programmer's Toolkit contains the
+necessary documentation for the individual functions in PM. For
+owners of the OS/2 Presentation Manager Softset, the books listed
+below are available from Microsoft Press. To purchase the books,
+either contact a local bookstore that carries computer books or
+contact Microsoft Press at (800) 638-3030.
+
+1. OS/2 Programmer's Reference. 3 vols.
+
+   The OS/2 Programmer's Reference books give documentation on each
+   function and structure, particularly Volume II, which covers the
+   two major types of PM calls, Win and GPI.
+
+2. OS/2 Presentation Manager Softset Tools
+
+   This manual comes with the Softset and Toolkit and covers the
+   various tools provided with the Softset. The most useful of
+   these is the Resource Compiler (see Section VIII, Resources).
+
+3. Programming the OS/2 Presentation Manager
+
+   Charles Petzold's book, Programming the OS/2 Presentation
+   Manager, contains many examples of different types of PM calls.
+   This book also gives a good discussion of the general structure
+   of a PM program.
+
+4. "Microsoft QuickHelp"
+
+   The "Microsoft QuickHelp" program is an on-line help system
+   containing information on a variety of OS/2 programming
+   subjects. It will allow you to search on a given word (e.g. a
+   function name) and will then bring up documentation on that
+   topic. This package contains additional help files to be used
+   with QuickHelp (see Appendix B: Help Files).
+
+Note: All documentation in the Toolkit is based on the C language.
+
+
+
+
+
+
+
+
+
+                                 41
+
+Appendix A: Disk Layout
+
+  +---------------+        +--------+
+  |               |  ------|LIB     |
+  | Main Disk     |        +--------+
+  |               |        +--------+
+  |               |  ------|INCLUDE |
+  |               |        +--------+
+  |               |        +--------+
+  |               |  ------|HELP    |
+  |               |        +--------+
+  |               |        +--------+
+  |               |  ------|UTILITY |
+  +---------------+        +--------+
+
+
+  +---------------+        +--------+
+  |               |  ------|FUNCTION|
+  | Examples Disk |        +--------+
+  |               |        +--------+
+  | (This disk    |  ------|EXIST2PM|
+  |  may expand   |        +--------+
+  |  to several   |        +--------+
+  |  disks as     |  ------|PMDEMOS |
+  |  examples     |        +--------+
+  |  are added.)  |        +--------+
+  |               |  ------|WELCOME |
+  +---------------+        +--------+
+
+Note: The disks provided with this application note are high-
+density disks. If they are 5.25-inch disks, they are 1.2 MB; if
+they are 3.5-inch disks, they are 1.44 MB.
+
+Because of the dynamic nature of the application note, there may be
+additional disks added to it in the future. If so, they will have
+the following structure:
+
+  +---------------+
+  |               |
+  |  Additional   |
+  |Examples Disks |        +--------+
+  |               |  ------|EXIST2PM|
+  |   (future)    |        +--------+
+  |               |        +--------+
+  |               |  ------|PMDEMOS |
+  |               |        +--------+
+  |               |
+  |               |
+  +---------------+
+
+
+
+
+
+
+
+
+                                 42
+
+Appendix B: Help Files
+
+The following files have been created with HELPMAKE to integrate
+help on the topics covered in this application note with the
+QuickHelp that comes with the Presentation Manager Toolkit:
+
+   File             Topic
+   
+   INDEX.HLP        Symbols to INCLUDE mapping (INDEX.DOC)
+   DOCS.HLP         Full printed documentation
+   FUNCTION.HLP     Examples of function calls (FUNCTION directory)
+
+To use these with QuickHelp, place the files in the directory to
+which your QH environment variable is set. INDEX.HLP has one
+keyword per letter (INDEXA - INDEXZ). FUNCTION.HLP has one keyword
+for each INCLUDE file. Keywords for DOCS.HLP are as follows:
+
+   Keyword        Topic
+   
+   Setup          I.  Getting Started
+   General        II. General PM Program Structure
+   Support        III.      Support Modules
+   Utility        IV. Utility Routines
+   Existing       V.  Enhancing Existing BASIC Programs
+   Examples       VI. Examples
+   Limitations    VII.      Limitations
+   Resources      VIII.     Resources
+   Troubleshooting    IX.   Troubleshooting
+   Conversion     X.  INCLUDE File Conversion Process
+   Tips           XI. Tips on Reading and Converting C Code
+   References     XII.      References
+   none           Appendix A: Disk Layout
+   PMBHelp        Appendix B: Help Files
+   Skeleton       Appendix C: SKELETON.BAS Listing
+   none           Appendix D: Diagram of Functions in SKELETON.BAS
+   none           Appendix E: Message Flow Chart
+   SupportSource  Appendix F: Support Module Source
+   CAL            Appendix G: CAL.BAS Conversion
+   INCLUDE        Appendix H: Header to INCLUDE Directory
+   Reading        Appendix I: Reading C Code
+   Glossary       Appendix J: Glossary of Presentation Manager
+   Terms
+   Team           Appendix K: Project Team
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                 43
+
+The most useful part that this package adds to the help system is
+the INDEX keywords. These allow you to look up a given function or
+constant to see which INCLUDE file is necessary.
+
+The following steps guide you through looking up the WINSETFOCUS
+function:
+
+1. Press "S" for "Search".
+
+2. Type "INDEXW" to list all symbols beginning with "W".
+
+3. Press "G" for "Go Find" to find a string.
+
+4. Type "WinSetFocus" to find the entry for the function. This
+   entry indexes the INCLUDE file that contains the function.
+
+5. For further help, do one of the following:
+
+   a. Single-click "WinSetFocus" to view function documentation
+      from OS/2 programmer's reference books (based on C).
+
+   b. Single-click the name of the INCLUDE file to see the
+      corresponding BASIC program example (if there is one).
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                 44
+
+Appendix C: SKELETON.BAS Listing
+
+'***********************************************************
+'*
+'* Program Name: Skeleton.BAS
+'*
+'* Include File: PMBase.BI
+'*
+'* Functions   :
+'*               WinInitialize
+'*               WinCreateMsgQueue
+'*               WinRegisterClass
+'*               WinCreateStdWindow
+'*               WinGetMsg
+'*               WinDispatchMsg
+'*               WinDestroyWindow
+'*               WinDestroyMsgQueue
+'*               WinTerminate
+'*               WinBeginPaint
+'*               WinFillRect
+'*               WinEndPaint
+'*               WinDefWindowProc
+'*
+'* Description : This is the base PM program that should be
+'*               used as a skeleton for developing others.
+'*               PMBase.BI contains the function, constant,
+'*               and type definitions necessary for every PM
+'*               program; for more specialized functions,
+'*               you will need other include files.
+'***********************************************************
+
+'*********         Initialization section        ***********
+
+REM $INCLUDE: 'PMBase.BI'
+
+DIM aqmsg AS QMSG
+
+flFrameFlags& = FCFTITLEBAR      OR FCFSYSMENU OR _
+                FCFSIZEBORDER    OR FCFMINMAX  OR _
+                FCFSHELLPOSITION OR FCFTASKLIST
+
+szClientClass$ = "ClassName" + CHR$(0)
+
+hab& = WinInitialize(0)
+hmq& = WinCreateMsgQueue(hab&, 0)
+
+bool% = WinRegisterClass(_
+          hab&,_
+          MakeLong(VARSEG(szClientClass$), SADD(szClientClass$)),_
+          RegBas,_
+          0,_
+          0)
+
+
+
+
+
+                                 45
+
+hwndFrame& = WinCreateStdWindow (_
+          HWNDDESKTOP,_
+          WSVISIBLE,_
+          MakeLong (VARSEG(flFrameFlags&), VARPTR(flFrameFlags&)),_
+          MakeLong (VARSEG(szClientClass$), SADD(szClientClass$)),_
+          0,_
+          0,_
+          0,_
+          0,_
+          MakeLong (VARSEG(hwndClient&), VARPTR(hwndClient&)))
+
+'**************         Message loop         ***************
+
+WHILE WinGetMsg(hab&,_
+       MakeLong(VARSEG(aqmsg), VARPTR(aqmsg)), 0, 0, 0)
+  bool% = WinDispatchMsg(hab&,_
+              MakeLong(VARSEG(aqmsg), VARPTR(aqmsg)))
+WEND
+
+'***********         Finalize section        ***************
+
+bool% = WinDestroyWindow(hwndFrame&)
+bool% = WinDestroyMsgQueue(hmq&)
+bool% = WinTerminate(hab&)
+
+END
+
+'***********         Window procedure        ***************
+
+FUNCTION ClientWndProc& (hwnd&, msg%, mp1&, mp2&)
+     DIM ClientRect AS RECTL
+     SELECT CASE msg%
+     CASE WMPAINT     'Paint the window with background color
+        hps&  = WinBeginPaint(hwnd&, 0,_
+                MakeLong(VARSEG(ClientRect), VARPTR(ClientRect)))
+        bool% = WinFillRect(hps&,_
+                MakeLong(VARSEG(ClientRect), VARPTR(ClientRect)),0)
+        bool% = WinEndPaint(hps&)
+        ClientWndProc&=0
+     CASE ELSE        'Pass control to system for other messages
+        ClientWndProc& = WinDefWindowProc(hwnd&, msg%, mp1&, mp2&)
+     END SELECT
+END FUNCTION
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                 46
+
+Appendix D: Diagram of Functions in SKELETON.BAS
+
+The diagram  below shows  graphically what  each  of  the     +---+
+functions in SKELETON.BAS affects. This is not a standard     | P |
+flow chart.  The program  order matches  the order of the     | M |
+functions on  the  left.  The  arrows  represent  effects     +---+
+(creation, destruction)  on the  indicated items  by  the       v
+functions (see Section II, General PM Program Structure).
+                                                                |
+WININITIALIZE >---------------------->+-------------------------+------+
+                                      |        Anchor Block     |      |
+                                      |                         |      |
+WINCREATEMSGQUEUE >-------------------+---------------------+   v      |
+                                      |                     | +---+    |
+                                      |                     | |   |    |
+WINREGISTERCLASS >---- REGBAS --------+-------------------+ | | M |    |
+                                      |                   | | | e |    |
+                                      |                   | | | s |    |
+WINCREATESTDWINDOW >------------------+-------+           | | | s |    |
+                                      |       |           | | | a |    |
+                                      |       v           | | | g |    |
+                                      | +------------+    | +>| e |<-+ |
+                                      | |+++Window+++|    |   |   |  | |
+                                      | |            |    |   | Q |  | |
+                                      | |            |    |   | u |  | |
+                                      | |            |    |   | e |  | |
+                                      | |            |    |   | u |  | |
+                                      | |            |    |   | e |  | |
+                                      | |            |    |   |   |  | |
+                                      | +------------+    |   +---+  | |
+                                      |       ^           |     v    | |
+                                      |       |           |     |    | |
+WINGETMSG <---------------------------+-------|-----------|-----+    | |
+                                      |       |           |          | |
+                                      |       |           |          | |
+                                      |       |           |          | |
+WINDISPATCHMSG >----------------------+-------|------+    |          | |
+                                      |       |      |    |          | |
+                                      |       | +------------------+ | |
+                                      |       | |                  | | |
+                                      |       | | BASCLIENTWNDPROC | | |
+                                      |       | |                  | | |
+                                      |       | +------------------+ | |
+                                      |       |      |    |          | |
+                                      |       |      v    v          | |
+                                      |       |   +---------------+  | |
+                                      |       |   |               |  | |
+WINDESTROYWINDOW >--------------------+-------+   | CLIENTWNDPROC |  | |
+                                      |           |               |  | |
+                                      |           +---------------+  | |
+                                      |                              | |
+WINDESTROYMSGQUEUE >------------------+------------------------------+ |
+                                      |                                |
+                                      |                                |
+
+
+
+                                     47
+
+WINTERMINATE >----------------------->+--------------------------------+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                     48
+
+Appendix E: Message Flow Chart
+
+
+       +-------------+      +------------+
+       |   KEYBOARD  |      |   MOUSE    |
+       | (User Input)|      |(User Input)|
+       +-------------+      +------------+
+             |                    |
+             v                    v
+       +---------------------------------+
+       |      Presentation Manager       |
+       |       Message Dispatcher        |
+       +---------------------------------+
+             |                    |
+             |                    v
+             |               +---------+
+             |               | Program |
+             |<--------------| Message |
+             |               |  Queue  |
+             |               +---------+
+             v
+       +---------------------------------+
+       |        BASCLIENTWNDPROC         |
+       |          (assembly)             |
+       +---------------------------------+
+             |
+             v
+   +------------------+
+   |   CLIENTWNDPROC  |
+   |      (BASIC)     |          +--------------------+
+   |         |        |          |                    |
+   |         v        |          |    Main Program    |
+   |   +----------+   |          |                    |
+   |   | Message  |   |          |      (BASIC)       |
+   |   |          |   |  CASEs   |                    |
+   |   | Handling |---+----------+->+---+             |
+   |   |          |   |       |  |  |SUB|             |
+   |   | Routine  |   |       |  |  +---+             |
+   |   +----------+   |       |  |                    |
+   |         |        |       |--+->+---+             |
+   +---------+--------+       |  |  |SUB|             |
+             |CASE ELSE       |  |  +---+             |
+             v                |  |                    |
+   +------------------+       +--+->+---+             |
+   | WINDEFWINDOWPROC |          |  |SUB|             |
+   |       (PM)       |          |  +---+             |
+   +------------------+          +--------------------+
+
+
+
+
+
+
+
+
+
+
+                                49
+
+Appendix F: Support Module Source
+
+Assembly:
+
+; Program Name: RegBas.ASM
+;
+; Functions :
+;              BreakLong
+;              MakeLong
+;              BasClientWndProc
+;              RegBas
+;
+; Description : This supplies interface routines for BASIC programs.
+;               RegBas is used to register window classes from BASIC.
+;               Also provided are the utility routines BreakLong and
+;               MakeLong.
+
+DOSSEG
+.286                     ; OS/2 runs only on 286 machines.
+.model medium, PASCAL    ; Medium memory model when interfacing with BASIC.
+                         ; PASCAL and BASIC use same calling conventions.
+
+.data
+
+hwndb1    DW  ?          ; set up local data for BasClientWndProc
+hwndb2    DW  ?
+msgb      DW  ?
+mp1b1     DW  ?
+mp1b2     DW  ?
+mp2b1     DW  ?
+mp2b2     DW  ?
+
+.code
+
+EXTRN     ClientWndProc:PROC       ; BASIC function to call
+
+PUBLIC BasClientWndProc, BreakLong, MakeLong, RegBas
+
+; Breaklong(Long, hi_word, lo_word)
+;
+BreakLong  PROC FAR USES bx, long1:WORD, long2:WORD, hiword:WORD, loword:WORD
+                mov bx, long1      ; get the hi-byte of the long
+                mov ax, bx
+                mov bx, hiword     ; return it to hiword
+                mov [bx], ax
+                mov bx, long2      ; get the lo-byte
+                mov ax, bx
+                mov bx, loword     ; return it to loword
+                mov [bx], ax
+                ret
+
+BreakLong     ENDP
+
+
+
+
+
+                                      50
+
+; MakeLong&(hi_word, low_word)
+;
+MakeLong      PROC FAR USES bx, hiword:WORD, loword:WORD
+                mov bx, hiword
+                mov ax, bx
+                mov dx, ax         ; return hi-word in dx
+                mov bx, loword     ; lo-word in ax for function
+                mov ax, bx         ; returning a long
+                ret
+MakeLong      ENDP
+
+BasClientWndProc    PROC hwnd1:word, hwnd2:word, msg:word, mp11:word,
+mp12:word, mp21:word, mp22:word
+
+                 push ds
+                 mov  ax, @data    ; get our data segment
+                 mov  ds, ax
+
+                 mov  ax, hwnd2    ; transfer the values passed
+                 mov  hwndb1, ax   ; from PM to local variables
+                 mov  ax, hwnd1    ; for the call to BASIC
+                 mov  hwndb2, ax
+                 mov  ax, msg
+                 mov  msgb, ax
+                 mov  ax, mp12
+                 mov  mp1b1, ax
+                 mov  ax, mp11
+                 mov  mp1b2, ax
+                 mov  ax, mp22
+                 mov  mp2b1, ax
+                 mov  ax, mp21
+                 mov  mp2b2, ax
+
+                 mov  ax, OFFSET hwndb1 ; set up for call to BASIC.
+                 push ax                ; BASIC expects values to
+                 mov  ax, OFFSET msgb   ; be passed by reference.
+                 push ax
+                 mov  ax, OFFSET mp1b1
+                 push ax
+                 mov  ax, OFFSET mp2b1
+                 push ax
+
+                 call ClientWndProc     ; call BASIC routine - note
+                                        ; return values are already
+                 pop  ds                ; in dx, ax so we don't have
+                 ret                    ; to do anything.
+BasClientWndProc    ENDP
+
+RegBas             PROC
+                mov dx, SEG BasClientWndProc      ; return address of
+                mov ax, OFFSET BasClientWndProc   ; BASIC routine.
+                ret
+RegBas             ENDP
+              end
+
+
+
+                                      51
+
+
+C:
+
+#define INCL_WIN
+#include <os2.h>
+
+extern MRESULT EXPENTRY ClientWndProc ( long near *, int near *,
+                                        long near *, long near *);
+
+MRESULT EXPENTRY BasClientWndProc(HWND hwnd, USHORT msg, MPARAM mp1,
+                                  MPARAM mp2)
+
+{
+   static long near hwndb;
+   static int near  msgb;
+   static long near mp1b;
+   static long near mp2b;
+   hwndb=(long)hwnd;
+   msgb=(int)msg;
+   mp1b=(long)mp1;
+   mp2b=(long) mp2;
+   return ClientWndProc(&hwndb, &msgb, &mp1b, &mp2b);
+
+} /* BasClientWndProc */
+
+
+long pascal far RegBas(void)
+{
+   return (long) BasClientWndProc;
+
+} /* regbas */
+
+
+long pascal Makelong (long passedlong)
+{
+   return passedlong;
+} /* MakeLong */
+
+
+void pascal BreakLong(int hiword, int loword, int *phiword, int *ploword)
+{
+   *phiword = hiword;
+   *ploword = loword;
+} /* BreakLong */
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                      52
+
+Appendix G: CAL.BAS Conversion
+'***********************************************************
+'*
+'* Program Name: Cal.BAS
+'*
+'* Description : This is the transition version of CAL.BAS.
+'*               It uses essentially the same I/O and flow
+'*               as the original CAL.BAS. All standard I/O
+'*               has been replaced with the routines from
+'*               WinStdIO.BAS (WinCLS, WinPrint, WinInput,
+'*               WinLocate, WinPos).
+'*
+'* Changes:      SKELETON main program added.
+'*               I/O control moved to ClientWndProc (WMPAINT).
+'*               PrintCalendar uses WinXXX routines for I/O.
+'*               GetInput uses WinXXX routines.
+'***********************************************************
+
+...
+'***********         Window procedure        ***************
+
+'****
+'** ClientWndProc is mainly from SKELETON, but contains controls
+'** from the original CAL.BAS. WMCHAR is necessary to buffer
+'** characters for WinInput. InputIndex is used to tell what
+'** the current stage of input is.
+'**
+'** Note: GOTO is used to display prompt again. Loops are not
+'**       advised anywhere except in the message loop.
+FUNCTION ClientWndProc& (hwnd&, msg%, mp1&, mp2&) STATIC
+  DIM ClientRect AS RECTL
+  ClientWndProc&=0
+  SELECT CASE msg%
+  CASE WMCHAR         'Buffer characters
+     CALL KeyMsg(hwnd&, mp1&, mp2&)
+  CASE WMPAINT
+     hps&  = WinBeginPaint(hwnd&, 0,_
+             MakeLong(VARSEG(ClientRect), VARPTR(ClientRect)))
+     BeginInput:
+     IF InputIndex% = 0 THEN    'Input Year
+       CALL WinCLS(hwnd&, hps&)
+       Year = GetInput(hwnd&, hps&, "Year (1899 to 2099): ", 1, 1899, 2099)
+            IF Year <> 0 THEN
+               InputIndex% = InputIndex% + 1
+            END IF
+     END IF
+     IF InputIndex% = 1 THEN    'Input Month
+         Month = GetInput(hwnd&, hps&, "Month (1 to 12): ", 2, 1, 12)
+         IF Month <> 0 THEN
+            InputIndex% = InputIndex% + 1
+         END IF
+     END IF
+
+
+
+
+
+
+                                     53
+
+     IF InputIndex% = 2 THEN     'Print Calendar         ' Print the calendar:
+         PrintCalendar hwnd&, hps&, Year, Month
+         InputIndex% = InputIndex% + 1
+     END IF
+     IF InputIndex% = 3 THEN     'Ask for another date
+         WinLocate hwnd&, hps&, 13, 1       ' Locate in 13th row, 1st col
+               WinPrintS hps&, "New Date? " ' Keep cursor on same line
+               Resp$ = WinInkey$            ' Wait for a key press
+               IF Resp$ <> "" THEN WinPrint hps&, Resp$ ' Print the key
+               IF (UCASE$(Resp$)="Y") THEN
+                  InputIndex% = 0
+                  GOTO BeginInput        'If another date, display prompt
+               ELSEIF Resp$ <> "" THEN
+                  bool% = WinSendMsg(hwnd&, WMCLOSE, 0, 0)
+               END IF
+           END IF
+        bool% = WinEndPaint(hps&)
+     END SELECT
+END FUNCTION
+' ======================== GETINPUT ==========================
+'       Prompts for input, then tests for a valid range.
+' ============================================================
+'****
+'** GetInput uses WinStdio routines to display and input text.
+'** These routines are very similar to the BASIC I/O statements.
+'** The main difference is that WinInput is a function that will
+'** return zero until the input is completed.
+FUNCTION GetInput (hwnd&, hps&, Prompt$, Row, LowVal, HighVal) STATIC
+
+   ' Locate prompt at specified row, turn cursor on and
+   ' make it one character high:
+   WinLocate hwnd&, hps&, Row, 1
+   WinPrintS hps&, Prompt$
+
+   ' Save column position:
+   Column = WinPos(hps&)
+   ' Input value until it's within range:
+   WinLocate hwnd&, hps&, Row, Column   ' Locate cursor at end of prompt
+   WinPrint hps&, SPACE$(10)     ' Erase anything already there
+   WinLocate hwnd&, hps&, Row, Column   ' Relocate cursor at end of prompt
+   done% = WinInput(hps&, "", GetVal$)     ' Input value with no prompt
+   IF done% THEN
+     Value = VAL(GetVal$)
+     GetVal$ = ""
+   END IF
+   IF (Value < LowVal) OR (Value > HighVal) THEN done% = 0
+   ' Return valid input as value of function:
+   IF done% THEN
+     GetInput = Value
+   ELSE
+     GetInput = 0
+   END IF
+END FUNCTION
+
+
+
+
+
+                                     54
+
+' ===================== PRINTCALENDAR ========================'     Prints a formatted calendar given the year and month.
+' ============================================================
+'****
+'** PrintCalendar uses WinStdio routines. WinLocates are used
+'** instead of PRINT USINGs to handle the proportional fonts.
+SUB PrintCalendar (hwnd&, hps&, Year, Month) STATIC
+SHARED MonthData() AS MonthType
+   ' Compute starting day (Su M Tu ...) and total days
+   ' for the month:
+   ComputeMonth Year, Month, StartDay, TotalDays
+   WinCLS hwnd&, hps&
+   Header$ = RTRIM$(MonthData(Month).MName) + "," + STR$(Year)
+   ' Calculates location for centering month and year:
+   LeftMargin = (35 - LEN(Header$)) \ 2
+   ' Print header:
+   WinPrintS hps&, SPACE$(LeftMargin)
+   WinPrint hps&, Header$
+   WinPrint hps&, ""
+   Row = WinCSRLIN(hwnd&, hps&)
+      'WinLocate's used to compensate for proportional font
+      WinLocate hwnd&, hps&, Row, 1 + 0 * 5
+      WinPrint hps&, "Su"
+      WinLocate hwnd&, hps&, Row, 1 + 1 * 5
+      WinPrint hps&, " M"
+      WinLocate hwnd&, hps&, Row, 1 + 2 * 5
+      WinPrint hps&, "Tu"
+      WinLocate hwnd&, hps&, Row, 1 + 3 * 5
+      WinPrint hps&, " W"
+      WinLocate hwnd&, hps&, Row, 1 + 4 * 5
+      WinPrint hps&, "Th"
+      WinLocate hwnd&, hps&, Row, 1 + 5 * 5
+      WinPrint hps&, " F"
+      WinLocate hwnd&, hps&, Row, 1 + 6 * 5
+      WinPrint hps&, "Sa"
+      WinPrint hps&, ""
+   ' Recalculate and print tab to the first day
+   ' of the month (Su M Tu ...):
+   Row = WinCSRLIN (hwnd&, hps&)
+   Column = 1 + StartDay * 5
+   'WinLocates used to compensate for proportional font
+   ' Print out the days of the month:
+   FOR I = 1 TO TotalDays
+      II$ = LTRIM$(RTRIM$(STR$(I)))
+      IF LEN(II$) = 1 THEN II$ = " " + II$
+      WinLocate hwnd&, hps&, Row, Column
+      WinPrintS hps&, II$
+      Column = Column + 5
+      ' Advance to the next line when the cursor
+      ' is past column 32:
+      IF Column > 32 THEN
+        Row = Row + 1
+        Column = 1
+      END IF
+   NEXT
+END SUB
+
+
+
+                                     55
+
+Appendix H: Header to INCLUDE Directory (INCLUDE.DOC)
+
+C Header File      BASIC INCLUDE File   Description of BASIC INCLUDEs
+-------------      ------------------   -----------------------------
+**none**           PMBASE.BI            Necessary functions for SKELETON
+**none**         # REGBAS.BI            MakeLong and RegBas functions
+**none**           OPENDLG.BI           Works with OPENDLG.DLL from Toolkit
+OS2DEF.H       # * OS2DEF.BI            Standard types and constants
+PMAVIO.H           PMAVIO.BI            Advanced I/O functions
+PMDEV.H            PMDEV.BI             Device constants and functions
+PMFONT.H         * PMFONT.BI            Font types and constants
+PMGPI.H            GPIARC.BI            Arc functions
+                   GPIAREA.BI           Area and pattern functions
+                   GPIATTR.BI           Attribute constants and functions
+(PMBITMAP.H)       GPIBIT.BI            Bitmap functions
+                   GPICHAR.BI           Character display functions
+                   GPICOLOR.BI          Color control functions
+                   GPICONT.BI           General graphics control
+                   GPIELEM.BI           Element functions
+                 * GPIERROR.BI          Graphics error constants
+                   GPIFONT.BI           Font functions
+                   GPILINE.BI           Line control functions
+                   GPIMARK.BI           Marker functions and constants
+                   GPIMETA.BI           Metafile control functions
+                   GPIPATH.BI           Path functions and constants
+                   GPIRGN.BI            Region control functions
+                   GPISEG.BI            Graphics segment control functions
+                   GPITRANS.BI          Transformation matrix functions
+PMORD.H          * PMORD.BI             Translation of GOCA orders
+PMSHL.H          + PMSHL.BI             Shell constants and functions
+PMWIN.H            WINACCEL.BI          Accelerator functions
+                 * WINBUTTN.BI          Button controls
+                   WINCLIP.BI           Clipboard manager
+                   WINDDE.BI            Dynamic data exchange
+                   WINDIALG.BI          Dialog Manager
+                 * WINENTRY.BI          Entryfield controls
+                   WINERR.BI            Windows error codes
+                 # WINFRAME.BI          Frame Manager
+               # * WINGEN.BI            General window constants
+                   WINHOOK.BI           Hook manager
+                   WININPUT.BI          Keyboard and mouse input
+                 * WINLIST.BI           Listboxes
+                 # WINMAN1.BI           Window Manager Subsection 1
+                   WINMAN2.BI           Window Manager Subsection 2
+                   WINMENU.BI           Menu manager
+                   WINMISC.BI           Miscellaneous functions
+                 # WINMSGS.BI           Window messages
+                   WINPOINT.BI          Pointer manager
+                   WINRECT.BI           Rectangle routines
+                 + WINSHELL.BI          Shell API
+                   WINSYS.BI            System values
+                   WINTRACK.BI          WinTrackRect
+
+* No FUNCTIONs (CONSTants and TYPEs only)
++ Contains byte FUNCTIONs or parameters that are impossible in BASIC
+# Some types, constants, or functions moved to PMBASE.BI
+
+
+
+
+                                     56
+
+Appendix I: Reading C Code
+
+ 1.  There are two types of REM statements in C:
+
+   a. For multiline comments, an open comment block "/*" precedes comment
+      lines, while a closed comment block "*/" follows them, as in the
+      following example:
+
+      /* This is a C comment block */
+
+   b. For single line comments following a line of code, a line comment
+      symbol "\\" is used, as in the following example:
+
+      a = 2 * 3;   \\ This is a C comment
+
+ 2.  #define in C is similar to CONST in BASIC.
+
+   #define is the equivalent of the CONST statement in BASIC and can be
+   used to define a constant value, as in the following example:
+
+   #define C_CONST 20
+
+   #define is also used to control program compilation. There is no
+   corresponding feature in BASIC. #define used to control program
+   compilation differs from the other #defines in that no value follows the
+   name of the constant. The following is an example:
+
+   #define COMPILER_SWITCH
+
+ 3.  An ampersand gives the address of a variable.
+
+   An ampersand (&) in front of a variable name instructs C to pass the
+   address of the variable. This is handled in BASIC by using the MAKELONG
+   function with VARSEG and VARPTR. In C, the function call
+
+   cfunc(&passVar);
+
+   when converted to BASIC is the following:
+
+   CALL cfunc(MakeLong(VARSEG(passVar), VARPTR(passVar)))
+
+ 4.  Asterisks are pointers to variables.
+
+   The asterisk (*) is used to reference a variable that contains the
+   address of another variable. To access the data at this address, a
+   combination of BASIC statements can be used. BreakLong can be used to
+   separate the segment and offset, then DEF SEG and PEEK can be used to
+   access the data. For example:
+
+   RetAddress& = PMFunction(parameters)
+   CALL BreakLong(RetAddress&, HiWord%, LoWord%)
+   DEF SEG = HiWord%
+   TheData% = PEEK(LoWord%)
+
+
+
+
+
+
+
+                                     57
+
+ 5.  Numeric Type Conversion
+
+   The following chart shows the major C variable types and the
+   corresponding types in BASIC:
+
+              
+               C                   BASIC
+              
+               short, int,
+               unsigned short,
+               unsigned, BOOLEAN   INTEGER
+               long                LONG
+               float               SINGLE
+               double              DOUBLE
+               char                STRING * 1
+              
+
+ 6.  Logical Operators
+
+   This chart shows the C logical and bitwise operators and the
+   corresponding BASIC keywords:
+
+              
+               C                   BASIC
+              
+               &&, &               AND
+               ||, |               OR
+               !                   NOT
+               !=                  <>
+              
+
+ 7.  Escape Sequences
+
+   This chart shows the slash formatting characters in C string literals
+   and their BASIC counterparts:
+
+          
+           C     Meaning                 BASIC
+          
+           \a    Bell (alert)            CHR$(7)
+           \b    Backspace               CHR$(8)
+           \f    Formfeed                CHR$(12)
+           \n    Newline                 CHR$(10)
+           \r    Carriage return         CHR$(13)
+           \t    Tab                     CHR$(9)
+           \v    Vertical tab            CHR$(11)
+           \'    Single quotation mark   CHR$(44)
+           \"    Double quotation mark   CHR$(34)
+           \\    Backslash               "\"
+          
+
+8. C's assignment (=) and equate (==) are BASIC's equal (=).
+
+   C uses the a single equal sign (=) to show an assignment (a = b). The
+   double equal sign (==) is used to test whether two values are equal (if
+   a == b). In BASIC, both of these operations are performed with the
+   single equal sign.
+
+
+
+                                     58
+
+9. Special C Assignment Operators
+
+   C programs can use a condensed notation for certain mathematical
+   functions. In BASIC, these equations must be expanded. The following
+   chart shows these types of operations and their BASIC equivalents:
+
+              
+               C                  BASIC
+              
+               x++, ++x           x = x + 1
+               x--, --x           x = x - 1
+               x += y             x = x + y
+               x -= y             x = x - y
+               x *= y             x = x * y
+               x &= y             x = x AND y
+               x |= y             x = x OR y
+              
+
+10.  Shift Operators
+
+   C has special shift operators that shift the bits in a variable. The
+   same thing can be accomplished in BASIC by multiplying or dividing by 2
+   to the appropriate power. (Note: The right shift requires an integer
+   divide (\).) The following chart shows some conversions:
+
+              
+               C                  BASIC
+              
+               x = x >> 3         x = x \ 2^3
+               x = x << 2         x = x * 2^2
+              
+
+11.  return in a C Function
+
+   To return a value from a C function, the keyword return is used. In
+   BASIC, this is accomplished by assigning a value to the name of the
+   function. The code below demonstrates a conversion:
+
+   C:
+   
+   int cfunc(int arg1) {
+      return 5 * arg1;
+   }
+
+   This code converted to BASIC is the following:
+
+   FUNCTION cfunc%(arg1 AS INTEGER)
+      cfunc% = 5 * arg1
+   END FUNCTION
+
+
+
+
+
+
+
+
+
+
+
+                                     59
+
+Appendix J: Glossary of Presentation Manager Terms
+
+Definitions in this section have been drawn in part or verbatim
+from the following sources (all published by Microsoft Press):
+
+   Title                              Abbreviation
+   
+   OS/2 Programmer's Reference. 3 vols. OS2PR
+   Programming the OS/2 Presentation Manager PM
+   Inside OS/2                        IOS2
+   Advanced OS/2 Programming          AOS2
+
+References are listed in the form (book, [volume,] page).
+
+accelerator -- Accelerators are keystrokes that generate command
+     messages for an application; they elicit the same behavior
+     as choosing a menu item (OS2PR, I, 239). For example, ALT+F4
+     is the accelerator for the Close option on the System menu.
+     Accelerators are used with the WINACCEL.BI INCLUDE file.
+
+anchor block -- An anchor block links a process with the system.
+     The anchor block includes an instance data segment in which
+     to store the process's environment and storage for error
+     messages (OS2PR, I, 30). It is used with WININITIALIZE and
+     WINTERMINATE.
+
+atom table -- An atom table is a mapping set up by the MS OS/2
+     atom manager. The atom manager provides a mechanism for
+     converting a string (atom name) to a 16-bit word (atom) that
+     can be used as a constant to represent the string in various
+     data structures for the application and the system. You can
+     save space by converting string to atoms when the same
+     string must be kept in a number of data structures (OS2PR,
+     I, 709-713). The atom functions enhance BASIC's memory
+     management by reducing storage space for strings. The atom
+     table is used with the WINMISC.BI INCLUDE file.
+
+dynamic data exchange (DDE) -- The dynamic data exchange (DDE)
+     protocol is a set of messages and guidelines that allows MS
+     OS/2 Presentation Manager applications to share data freely,
+     using either one-time data transfers or ongoing exchanges,
+     in which applications send updates to one another as new
+     data becomes available (OS2PR, I, 347). These functions have
+     not been tested with BASIC and, due to BASIC's memory
+     management, may not be feasible. (See Section VII,
+     Limitations.) DDE is used with the WINDDE.BI INCLUDE file.
+
+graphics programming interface (GPI) -- The graphics programming
+     interface (GPI) consists of the MS OS/2 system functions
+     that let you create device-independent graphics for your
+     applications. The GPI functions are used in conjunction with
+     the window manager to draw lines, shapes, and text in a
+     window. Applications can also use GPI functions to draw
+     graphics output on such devices as raster printers and
+
+
+
+                                60
+
+     vector plotters (OS2PR, I, 19). The five GPI primitives are
+     lines, patterned areas, text, marker symbols, and images
+     (PM, 153-234).
+
+handle -- A binary value that represents a system resource, such
+     as a file, pipe, semaphore, or queue (AOS2, 753). "Known to
+     programmers as a magic cookie" (IOS2, 273). A handle is
+     usually a 32-bit value (LONG in BASIC).
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                61
+
+hook -- Hooks are provided with MS OS/2 to allow applications to
+     monitor and modify the message stream. The six types of
+     hooks are input hooks, send-message hooks, message-filter
+     hooks, journal-record hooks, journal-playback hooks, and
+     help hooks (OS2PR, I, 365-375). See Section III, Support
+     Modules. Hooks are used with the WINHOOK.BI INCLUDE file.
+
+interprocess communication (IPC) -- IPC is the exchange of
+     information among two or more processes via semaphores,
+     pipes, queues, shared memory, or signals (AOS2, 754). Not
+     all of these functions have been tested with BASIC and, due
+     to BASIC's memory management, some may not be feasible. (See
+     Section VII, Limitations.)
+
+message queue -- Every Presentation Manager application needs a
+     message queue. A message queue is the only means an
+     application has to receive input from the keyboard or mouse.
+     Only applications that create message queues can create
+     windows (OS2PR, I, 80). Message queues are used with
+     WINCREATEMSGQUEUE, WINDESTROYMSGQUEUE, and WINMSGS.BI.
+
+metafile -- A metafile is a file that contains a picture and
+     information that MS OS/2 uses when it draws the picture. The
+     elements in a metafile are picture, logical color table,
+     logical font, fill pattern, viewing transformation, page
+     units, and page dimensions (OS2PR, I, 551-559). Metafiles
+     are used with the GPIMETA.BI INCLUDE file.
+
+module definition file -- A module definition file is a file that
+     describes the segment characteristics of an MS OS/2
+     application program or dynalink library. The .DEF file is
+     processed by the Linker during the creation of an executable
+     (AOS2, 755). Specify global functions here, such as REGBAS,
+     BASCLIENTWNDPROC, and CLIENTWNDPROC.
+
+resource -- Resources are read-only data segments that are stored
+     in a program's .EXE file but that are not part of the
+     program's normal code and data segments (PM, 527). Examples
+     of resources are bitmaps, icons, pointers, and strings. See
+     Section VIII, Resources.
+
+semaphore -- A semaphore is a special variable that a program can
+     use to signal the beginning and ending of a given operation
+     (OS2PR, I, 677).  These functions have not been tested with
+     BASIC, and due to BASIC's memory management, may not be
+     feasible.  (See Section VII, Limitations.)
+
+thread -- A thread is a point of execution within a process; each
+     thread is associated with a priority, register contents, and
+     a state (blocked, ready to execute, or executing). A process
+     always contains one or more threads (AOS2, 760).
+     Multithreaded applications are not possible in BASIC.
+     Functions relating to threads have been commented out.
+
+
+
+
+                                62
+
+window class -- A window class determines the window styles and
+     window procedure given to windows of that class when they
+     are created. Every window created by an application is a
+     member of a window class. Each window class has an
+     associated window procedure that it shares with all windows
+     of that same class. The window procedure handles messages
+     for all windows of that class and, therefore, defines the
+     behavior and appearance of the window (OS2PR, I, 93). This
+     package contains support routines for up to 21 window
+     classes. Window classes are used with WINREGISTERCLASS.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                63
+
+Appendix K: Project Team
+
+This application note is the result of the hard work and
+dedication of the following people from the Business
+Languages group of Microsoft Product Support to improve
+BASIC's potential in MS OS/2:
+
+Project Heads: Lars Opstad
+               Arthur Hanson
+
+Research Team: Tito Messerli
+               Nancy Speer
+               Curtis Coates
+               Brian Kampe
+               Steve Sutton
+               Tom Dempsey
+
+Editors:       Linda Wenke
+               Margaret Collins
+
+The goal in producing this application note is to make it
+self-supporting for most technical questions. Due to the
+complicated nature of questions on this topic, it is in your
+best interest to thoroughly review this document and the
+books included with the OS/2 Presentation Manager Toolkit
+before calling Microsoft Product Support.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                              64

@@ -1,0 +1,123 @@
+/*******************************************************************\
+* File Name:   Bounce.RC                                            *
+*                                                                   *
+* Description: Resource compiler script file for Bounce.BAS.        *
+*                                                                   *
+*              This file defines the resources used by Bounce.BAS.  *
+*              There are three types of resources created here:     *
+*              Menus, Accelerator Tables, and Dialog Boxes. Inside  *
+*              the dialog boxes, further controls include: Text     *
+*              (Left, Right, and Centered), Scrollbars (Horizontal  *
+*              and Vertical), Push Buttons, Check Boxes, and Frames.*
+\*******************************************************************/
+
+#include <bounce.h>
+
+/* Menu. Tildes (~) denote letter to choose with. */
+MENU ID_MENU
+  {
+  SUBMENU "~Control", IDM_CONTROL
+     {
+     MENUITEM "~Start   ",IDM_C_START
+     MENUITEM "S~top    ", IDM_C_STOP
+     MENUITEM "~Pause   ",IDM_C_PAUSE
+     MENUITEM "Co~ntinue",IDM_C_CONT
+     MENUITEM SEPARATOR
+     MENUITEM "E~xit    ",IDM_C_EXIT
+     }
+  SUBMENU "~Options", IDM_OPTIONS
+     {
+     MENUITEM "~Sound    ",IDM_O_SOUND
+     MENUITEM "Si~ze     ", IDM_O_SIZE
+     MENUITEM "~Velocity ",IDM_O_VELOCITY
+     MENUITEM "~Position ",IDM_O_POS
+     MENUITEM "~Angle    ",IDM_O_ANGLE
+     MENUITEM "~Trail    ",IDM_O_TRAIL
+     }
+  }
+
+ACCELTABLE ID_ACCEL
+  {
+  VK_SPACE, IDM_C_START, VIRTUALKEY
+  VK_ESC, IDM_C_STOP, VIRTUALKEY
+  VK_SCRLLOCK, IDM_O_SOUND, VIRTUALKEY
+  "S", IDM_C_PAUSE, CONTROL
+  "s", IDM_C_PAUSE, CONTROL
+  "Q", IDM_C_CONT, CONTROL
+  "q", IDM_C_CONT, CONTROL
+  VK_SCRLLOCK, IDM_O_SOUND, VIRTUALKEY
+  "Z", IDM_O_SIZE, CONTROL
+  "z", IDM_O_SIZE, CONTROL
+  "V", IDM_O_VELOCITY, CONTROL
+  "v", IDM_O_VELOCITY, CONTROL
+  "P", IDM_O_POS, CONTROL
+  "p", IDM_O_POS, CONTROL
+  "A", IDM_O_ANGLE, CONTROL
+  "a", IDM_O_ANGLE, CONTROL
+  "T", IDM_O_TRAIL, CONTROL
+  "t", IDM_O_TRAIL, CONTROL
+  }
+
+/* Size dialog */
+DLGTEMPLATE IDM_O_SIZE
+    {
+    DIALOG "Size of Ball Radius", IDM_O_SIZE, 79, 48, 126, 65, WS_SAVEBITS | WS_CLIPSIBLINGS
+	{
+	CTEXT	      "Size of Ball Radius", -1, 25, 55, 83, 8
+	CHECKBOX      "Random Size", IDM_O_S_RAND, 31, 18, 75, 9
+	CONTROL       "", IDM_O_S_SCROLL, 5, 28, 119, 8, WC_SCROLLBAR, SBS_HORZ | WS_VISIBLE
+	LTEXT	      "1", -1, 7, 39, 20, 8
+	RTEXT	      "20", -1, 101, 40, 20, 8
+	CONTROL       "", -1, 51, 41, 30, 12, WC_STATIC, SS_FGNDFRAME | WS_GROUP | WS_VISIBLE
+	CTEXT	      "", IDM_O_S_CURRENT, 54, 43, 24, 8
+	DEFPUSHBUTTON "OK", IDM_O_S_OK, 50, 4, 30, 10
+	}
+    }
+
+
+/* Velocity dialog */
+DLGTEMPLATE IDM_O_VELOCITY
+    {
+    DIALOG "Speed of Ball", IDM_O_VELOCITY, 79, 58, 126, 51, WS_SAVEBITS | WS_CLIPSIBLINGS
+	{
+	CTEXT	      "Speed of Ball", -1, 33, 41, 59, 8
+	CONTROL       "", IDM_O_V_SCROLL, 4, 14, 119, 8, WC_SCROLLBAR, SBS_HORZ | WS_VISIBLE
+	LTEXT	      "1", -1, 6, 26, 20, 8
+	CONTROL       "", -1, 51, 27, 34, 12, WC_STATIC, SS_FGNDFRAME | WS_GROUP | WS_VISIBLE
+	RTEXT	      "50", -1, 100, 26, 20, 8
+	CTEXT	      "", IDM_O_V_CURRENT, 54, 29, 28, 8
+	DEFPUSHBUTTON "OK", IDM_O_V_OK, 50, 2, 30, 8
+	}
+    }
+
+/* Angle dialog */
+DLGTEMPLATE IDM_O_ANGLE
+    {
+    DIALOG "Angle of Ball Movement", IDM_O_ANGLE, 79, 56, 126, 50, WS_SAVEBITS | WS_CLIPSIBLINGS
+	{
+	CTEXT		  "Angle of Ball Movement", -1, 14, 41, 103, 8
+	CONTROL 	  "", IDM_O_A_SCROLL, 5, 14, 119, 8, WC_SCROLLBAR, SBS_HORZ | WS_VISIBLE
+	LTEXT		  "0", -1, 8, 25, 20, 8
+	CONTROL 	  "", -1, 51, 27, 34, 12, WC_STATIC, SS_FGNDFRAME | WS_GROUP | WS_VISIBLE
+	RTEXT		  "360", -1, 102, 24, 20, 8
+	CTEXT		  "", IDM_O_A_CURRENT, 54, 29, 28, 8
+	DEFPUSHBUTTON	  "OK", IDM_O_A_OK, 50, 1, 30, 9
+	}
+    }
+
+/* Position dialog */
+DLGTEMPLATE IDM_O_POS
+    {
+    DIALOG "Current Ball Position", IDM_O_POS, 71, 22, 124, 94, WS_SAVEBITS | WS_CLIPSIBLINGS
+	{
+	CTEXT		"Current Ball Position", -1, 15, 85, 90, 8
+	CONTROL 	"", IDM_O_P_HSCROLL, 17, 24, 76, 8, WC_SCROLLBAR, SBS_HORZ | WS_VISIBLE
+	CONTROL 	"", IDM_O_P_VSCROLL, 98, 36, 11, 40, WC_SCROLLBAR, SBS_VERT | WS_VISIBLE
+	LTEXT		"(", -1, 30, 50, 3, 8
+	LTEXT		")", -1, 80, 50, 4, 8
+	LTEXT		",", -1, 55, 50, 2, 8
+	RTEXT		"", IDM_O_P_X, 39, 50, 16, 8
+	RTEXT		"", IDM_O_P_Y, 64, 50, 16, 8
+	DEFPUSHBUTTON	"OK", IDM_O_P_OK, 40, 6, 30, 11
+	}
+    }

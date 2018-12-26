@@ -1,0 +1,113 @@
+'**************************************************************
+'*
+'* Include File: WinSys.BI
+'*
+'* Requires:     none
+'*
+'* Description:  System Value Manager
+'*
+'*************************************************************
+
+DECLARE FUNCTION WinQuerySysValue&(BYVAL hwndDesktop AS LONG,_
+                                   BYVAL iSysValue AS INTEGER)
+
+DECLARE FUNCTION WinSetSysValue%(BYVAL hwndDesktop AS LONG,_
+                                 BYVAL iSysValue AS INTEGER,_
+                                 BYVAL lValue AS LONG)
+
+CONST SVSWAPBUTTON       =0
+CONST SVDBLCLKTIME       =1
+CONST SVCXDBLCLK         =2
+CONST SVCYDBLCLK         =3
+CONST SVCXSIZEBORDER     =4
+CONST SVCYSIZEBORDER     =5
+CONST SVALARM            =6
+
+CONST SVRESERVEDFIRST1   =7
+CONST SVRESERVEDLAST1    =8
+
+CONST SVCURSORRATE       =9
+CONST SVFIRSTSCROLLRATE  =10
+CONST SVSCROLLRATE       =11
+CONST SVNUMBEREDLISTS    =12
+CONST SVWARNINGFREQ      =13
+CONST SVNOTEFREQ         =14
+CONST SVERRORFREQ        =15
+CONST SVWARNINGDURATION  =16
+CONST SVNOTEDURATION     =17
+CONST SVERRORDURATION    =18
+
+CONST SVRESERVEDFIRST    =19
+CONST SVRESERVEDLAST     =19
+
+CONST SVCXSCREEN         =20
+CONST SVCYSCREEN         =21
+CONST SVCXVSCROLL        =22
+CONST SVCYHSCROLL        =23
+CONST SVCYVSCROLLARROW   =24
+CONST SVCXHSCROLLARROW   =25
+CONST SVCXBORDER         =26
+CONST SVCYBORDER         =27
+CONST SVCXDLGFRAME       =28
+CONST SVCYDLGFRAME       =29
+CONST SVCYTITLEBAR       =30
+CONST SVCYVSLIDER        =31
+CONST SVCXHSLIDER        =32
+CONST SVCXMINMAXBUTTON   =33
+CONST SVCYMINMAXBUTTON   =34
+CONST SVCYMENU           =35
+CONST SVCXFULLSCREEN     =36
+CONST SVCYFULLSCREEN     =37
+CONST SVCXICON           =38
+CONST SVCYICON           =39
+CONST SVCXPOINTER        =40
+CONST SVCYPOINTER        =41
+
+CONST SVDEBUG            =42
+CONST SVCMOUSEBUTTONS    =43
+CONST SVPOINTERLEVEL     =44
+CONST SVCURSORLEVEL      =45
+CONST SVTRACKRECTLEVEL   =46
+
+CONST SVCTIMERS          =47
+
+CONST SVMOUSEPRESENT     =48
+
+CONST SVCXBYTEALIGN      =49
+CONST SVCYBYTEALIGN      =50
+
+CONST SVCSYSVALUES       =51
+
+
+'** System color functions 
+
+
+DECLARE FUNCTION WinQuerySysColor&(BYVAL hwndDesktop AS LONG,_
+                                   BYVAL clr AS LONG,_
+                                   BYVAL lReserved AS LONG)
+
+DECLARE FUNCTION WinSetSysColors%(BYVAL hwndDesktop AS LONG,_
+                                  BYVAL flOptions AS LONG,_
+                                  BYVAL flFormat AS LONG,_
+                                  BYVAL clrFirst AS LONG,_
+                                  BYVAL cclr AS LONG,_
+                                  BYVAL pclr AS LONG)
+
+CONST SYSCLRWINDOWSTATICTEXT   =-26&
+CONST SYSCLRSCROLLBAR          =-25&
+CONST SYSCLRBACKGROUND         =-24&
+CONST SYSCLRACTIVETITLE        =-23&
+CONST SYSCLRINACTIVETITLE      =-22&
+CONST SYSCLRMENU               =-21&
+CONST SYSCLRWINDOW             =-20&
+CONST SYSCLRWINDOWFRAME        =-19&
+CONST SYSCLRMENUTEXT           =-18&
+CONST SYSCLRWINDOWTEXT         =-17&
+CONST SYSCLRTITLETEXT          =-16&
+CONST SYSCLRACTIVEBORDER       =-15&
+CONST SYSCLRINACTIVEBORDER     =-14&
+CONST SYSCLRAPPWORKSPACE       =-13&
+CONST SYSCLRHELPBACKGROUND     =-12&
+CONST SYSCLRHELPTEXT           =-11&
+CONST SYSCLRHELPHILITE         =-10& ' assumed by ColorInit() 
+CONST SYSCLRCSYSCOLORS         =17&

@@ -1,0 +1,162 @@
+/*******************************************************************\
+* File Name:   Setup.RC                                             *
+*                                                                   *
+* Description: Resource compiler script file for Setup.BAS.         *
+*                                                                   *
+*              This file defines the resources used by Setup.BAS.   *
+*              Three types of resources are created: a menu, an     *
+*              accelerator table, and 4 dialog boxes.               *
+*                                                                   *
+*              The first dialog box is a simple about box and       *
+*              requires no processing.                              *
+*                                                                   *
+*              The second dialog box is basically an entryfield     *
+*              box with some checkboxes.  It is used to set drives  *
+*              and paths.  The procedure for this dialog is         *
+*              ClientWndProc1.                                      *
+*                                                                   *
+*              The third and fourth dialog boxes are help boxes     *
+*              and also require no processing.                      *
+\*******************************************************************/
+
+#include <os2.h>
+
+#define IDSETUP  1
+#define IDBITMAP 2
+#define IDDRPATH 2
+#define IDSTART  3
+#define IDABOUT  4
+
+#define IDSOURCE  1
+#define IDDEST    2
+#define IDBASE    3
+#define IDINCLUDE 4
+#define IDLIB     5
+#define IDCMD     6
+#define IDHELP    7
+#define IDUTILITY 8
+#define IDEXAMPLE 9
+#define IDCHECK   20
+
+#define BNOK      10
+#define BNCANCEL  11
+#define BNHELP    12
+
+BITMAP  IDBITMAP \pm\setup\setup.bmp
+POINTER IDSETUP  \pm\setup\setup.ico
+
+MENU IDSETUP {
+
+   SUBMENU "~Setup", IDSETUP {
+
+      MENUITEM "Set ~Drives/Paths", IDDRPATH
+      MENUITEM "~Start Setup",      IDSTART
+      MENUITEM SEPARATOR
+      MENUITEM "E~xit\tF3", SC_CLOSE, MIS_SYSCOMMAND
+      MENUITEM "A~bout Setup...",   IDABOUT
+   }
+
+   MENUITEM "F1=Help", 0, MIS_HELP | MIS_BUTTONSEPARATOR
+
+}
+
+ACCELTABLE IDSETUP
+      {
+      VK_F3, SC_CLOSE, VIRTUALKEY, SYSCOMMAND
+      }
+
+DLGTEMPLATE IDABOUT {
+
+   DIALOG "", 0, 32, 32, 200, 88,, FCF_DLGBORDER | FS_SCREENALIGN {
+
+      CTEXT "BASIC OS/2 Presentation Manager"       -1, 10, 64, 180, 8
+      CTEXT "SETUP"                                 -1, 10, 56, 180, 8
+      CTEXT "Setup for BASIC PM Toolkit Supplement" -1, 10, 40, 180, 8
+      CTEXT "Created by Microsoft Corp, 1989"       -1, 10, 32, 180, 8
+      DEFPUSHBUTTON "OK"                     DID_OK, 80,  8,  40, 16, WS_GROUP
+   }
+
+}
+
+
+DLGTEMPLATE IDDRPATH
+BEGIN
+    DIALOG "", -1, 99, 29, 271, 172, FS_DLGBORDER | FS_SCREENALIGN
+    BEGIN
+        LTEXT "Source Drive:",                   -1,   5, 142, 132, 8
+        LTEXT "Destination Drive:",              -1,   5, 127, 132, 8
+        LTEXT "Base Directory:",                 -1,   5, 112, 132, 8
+        LTEXT "Subdirectory for INCLUDE files:", -1,   5,  98, 135, 8
+        LTEXT "Subdirectory for LIB files:",     -1,   5,  83, 132, 8
+        LTEXT "Subdirectory for CMD files:",     -1,   5,  68, 132, 8
+        LTEXT "Subdirectory for Help files:",    -1,   5,  53, 132, 8
+        LTEXT "Subdirectory for Utility files:", -1,   5,  38, 132, 8
+        LTEXT "Subdirectory for Example files:", -1,   5,  23, 132, 8
+        CTEXT "Set Drives and Paths",            -1,  84, 159,  91, 8
+        CTEXT "Install?",                        -1, 235, 158,  35, 8
+        ENTRYFIELD "", IDSOURCE , 150, 143, 82, 8, SS_FGNDFRAME | WS_GROUP
+        ENTRYFIELD "", IDDEST   , 150, 128, 82, 8, SS_FGNDFRAME | WS_GROUP
+        ENTRYFIELD "", IDBASE   , 150, 113, 82, 8, SS_FGNDFRAME | WS_GROUP
+        ENTRYFIELD "", IDINCLUDE, 150,  98, 82, 8, SS_FGNDFRAME | WS_GROUP
+        ENTRYFIELD "", IDLIB    , 150,  83, 82, 8, SS_FGNDFRAME | WS_GROUP
+        ENTRYFIELD "", IDCMD    , 150,  68, 82, 8, SS_FGNDFRAME | WS_GROUP
+        ENTRYFIELD "", IDHELP   , 150,  53, 82, 8, SS_FGNDFRAME | WS_GROUP
+        ENTRYFIELD "", IDUTILITY, 150,  39, 82, 8, SS_FGNDFRAME | WS_GROUP
+        ENTRYFIELD "", IDEXAMPLE, 150,  24, 82, 8, SS_FGNDFRAME | WS_GROUP
+        CHECKBOX   "", IDCMD     + IDCHECK,246, 68, 9, 9,  BS_NOPOINTERFOCUS | WS_TABSTOP
+        CHECKBOX   "", IDHELP    + IDCHECK,246, 53, 9, 9,  BS_NOPOINTERFOCUS | WS_TABSTOP
+        CHECKBOX   "", IDUTILITY + IDCHECK,246, 39, 9, 9,  BS_NOPOINTERFOCUS | WS_TABSTOP
+        CHECKBOX   "", IDEXAMPLE + IDCHECK,246, 24, 9, 9,  BS_NOPOINTERFOCUS | WS_TABSTOP
+        DEFPUSHBUTTON "OK",     BNOK,      33, 5, 38, 12
+        PUSHBUTTON    "Cancel", BNCANCEL, 123, 5, 38, 12
+        PUSHBUTTON    "Help",   BNHELP,   214, 5, 38, 12
+    END
+END
+
+DLGTEMPLATE WM_HELP
+{
+    DIALOG "", WM_HELP, 80, 20, 248, 200, FS_DLGBORDER | FS_SCREENALIGN
+    {
+        CTEXT "BASIC PM Setup -- Help", -1, 50, 187, 108, 8
+        LTEXT "SETUP provides you with an easy way to copy the files provided with this package.",
+                -1, 20, 163, 210, 16, DT_WORDBREAK
+        LTEXT
+"SETUP requires that all files are copied onto the same drive and in a limited directory structure.  You can set the base directory and subdirectories for each of the different types of files, but that is the limit of SETUP's flexibility.",
+                -1, 20, 114, 210, 41, DT_WORDBREAK
+        LTEXT "For a different directory structure, see the ""Getting Started"" section for instructions on copying the files manually.",
+                -1, 20, 80, 210, 26,  DT_WORDBREAK
+        LTEXT "Besides copying the files, SETUP also modifies the 4 PMBC.CMD files for the directory structure specified and NEW-VARS.SYS which contains the environment variables which should be changed in your CONFIG.SYS.",
+                -1, 20, 30, 210, 42,  DT_WORDBREAK
+        DEFPUSHBUTTON "OK", -1, 104, 8, 40, 12
+    }
+}
+
+DLGTEMPLATE BNHELP
+{
+    DIALOG "", BNHELP, 80, 20, 240, 220, FS_DLGBORDER | FS_SCREENALIGN
+    {
+        LTEXT "Enter paths for each item: ",
+              -1, 60, 200, 120, 8
+        LTEXT "Source drive contains disks from this package.",
+              -1, 16, 184, 205, 8
+        LTEXT "Destination drive will contain all files.",
+              -1, 16, 168, 205, 8
+        LTEXT "Base directory contains the following subdirectories:",
+              -1, 16, 152, 205, 8, DT_WORDBREAK
+        LTEXT "INCLUDE files are the converted .H files.",
+              -1, 32, 136, 176, 8
+        LTEXT "Library files are RegBas.LIB and source.",
+              -1, 32, 120, 179, 8
+        LTEXT "Help files are .HLP files for QuickHelp.",
+              -1, 32, 104, 174, 8
+        LTEXT "Command files are PMBC.CMD, etc.",
+              -1, 32,  88, 195, 8
+        LTEXT "Utility files are BASIC utility routines.",
+              -1, 32,  72, 195, 8
+        LTEXT "Example files are PMBASIC examples.",
+              -1, 32,  56, 195, 8
+        LTEXT "To setup with a different directory structure, copy files manually as shown in ""Getting Started"".",
+              -1, 16,  32, 209, 16, DT_WORDBREAK
+        DEFPUSHBUTTON "OK", -1, 100, 8, 40, 12
+    }
+}

@@ -1,0 +1,7 @@
+  NAME		 WINPOINT  WINDOWAPI
+   
+  DESCRIPTION	 'BASIC Presentation Manager Mouse Pointer Program'
+  PROTMODE
+  HEAPSIZE       1024
+  STACKSIZE      8192
+  EXPORTS	 BasClientWndProc

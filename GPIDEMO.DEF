@@ -1,0 +1,9 @@
+    NAME           GPIDEMO      WINDOWAPI
+
+    DESCRIPTION    'Combines most of the GPI example programs into one'
+    PROTMODE
+    HEAPSIZE       1024
+    STACKSIZE      8192
+    EXPORTS        BasClientWndProc
+                   BasClientWndProc1
+

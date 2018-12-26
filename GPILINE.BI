@@ -1,0 +1,121 @@
+'**************************************************************
+'*
+'* Include File: GpiLine.BI
+'*
+'* Requires:     OS2Def.BI (POINTL type)
+'*               PMBase.BI (RECTL type)
+'*
+'* Description:  Line functions and constants
+'*
+'**************************************************************
+
+' ** line primitive functions
+DECLARE FUNCTION  GpiBox&( BYVAL HPS AS LONG,_
+			   BYVAL ALONG AS LONG,_
+			   BYVAL PPOINTL AS LONG,_
+			   BYVAL BLONG AS LONG,_
+			   BYVAL CLONG AS LONG )
+
+DECLARE FUNCTION  GpiMove%( BYVAL HPS AS LONG,_
+			    BYVAL PPOINTL AS LONG )
+
+DECLARE FUNCTION  GpiLine&( BYVAL HPS AS LONG,_
+			    BYVAL PPOINTL AS LONG )
+
+DECLARE FUNCTION  GpiPolyLine&( BYVAL HPS AS LONG,_
+				BYVAL ALONG AS LONG,_
+				BYVAL PPOINTL AS LONG )
+
+'  basic line type styles
+CONST  LINETYPEERROR	 =     -1
+CONST  LINETYPEDEFAULT	 =     0
+CONST  LINETYPEDOT	 =     1
+CONST  LINETYPESHORTDASH =     2
+CONST  LINETYPEDASHDOT	 =     3
+CONST  LINETYPEDOUBLEDOT =     4
+CONST  LINETYPELONGDASH  =     5
+CONST  LINETYPEDASHDOUBLEDOT = 6
+CONST  LINETYPESOLID	    =  7
+CONST  LINETYPEINVISIBLE    =  8
+CONST  LINETYPEALTERNATE    =  9
+
+'  cosmetic line widths
+CONST  LINEWIDTHERROR	    =  -1
+CONST  LINEWIDTHDEFAULT     =  0
+CONST  LINEWIDTHNORMAL	    =  &H00010000   '  MAKEFIXED(1,0)
+
+'  actual line widths
+CONST  LINEWIDTHGEOMERROR  =   -1
+
+'  line end styles
+CONST  LINEENDERROR	  =    -1
+CONST  LINEENDDEFAULT	  =    0
+CONST  LINEENDFLAT	  =    1
+CONST  LINEENDSQUARE	  =    2
+CONST  LINEENDROUND	  =    3
+
+'  line join styles
+CONST  LINEJOINERROR	  =    -1
+CONST  LINEJOINDEFAULT	  =    0
+CONST  LINEJOINBEVEL	  =    1
+CONST  LINEJOINROUND	  =    2
+CONST  LINEJOINMITRE	  =    3
+
+'  variation of SIZE used for FIXEDs
+TYPE SIZEF	 '  sizfx
+    cx AS LONG
+    cy AS LONG
+END TYPE
+
+'  return codes for GpiPtVisible
+CONST  PVISERROR     =	0
+CONST  PVISINVISIBLE =	1
+CONST  PVISVISIBLE   =	2
+
+'  return codes for GpiRectVisible
+CONST  RVISERROR     =	0
+CONST  RVISINVISIBLE =	1
+CONST  RVISPARTIAL   =	2
+CONST  RVISVISIBLE   =	3
+
+
+DECLARE FUNCTION GpiPtVisible&( BYVAL HPS AS LONG,_
+				BYVAL PPOINTL AS LONG )
+
+DECLARE FUNCTION GpiRectVisible&( BYVAL HPS AS LONG,_
+				  BYVAL PRECTL AS LONG )
+
+' ** line primitive functions
+DECLARE FUNCTION   GpiSetLineType%( BYVAL HPS AS LONG,_
+				    BYVAL ALONG AS LONG )
+
+DECLARE FUNCTION   GpiQueryLineType&( BYVAL HPS AS LONG )
+
+DECLARE FUNCTION   GpiSetLineWidth%( BYVAL HPS AS LONG,_
+				     BYVAL FIXED AS LONG)
+
+DECLARE FUNCTION  GpiQueryLineWidth&( BYVAL HPS AS LONG )
+
+DECLARE FUNCTION  GpiSetLineWidthGeom%( BYVAL HPS AS LONG,_
+					BYVAL ALONG AS LONG )
+
+DECLARE FUNCTION  GpiQueryLineWidthGeom&( BYVAL HPS AS LONG )
+
+DECLARE FUNCTION  GpiSetLineEnd%( BYVAL HPS AS LONG,_
+				  BYVAL ALONG AS LONG )
+
+DECLARE FUNCTION  GpiQueryLineEnd&( BYVAL HPS AS LONG )
+
+DECLARE FUNCTION  GpiSetLineJoin%( BYVAL HPS AS LONG,_
+				   BYVAL ALONG AS LONG )
+
+DECLARE FUNCTION  GpiQueryLineJoin&( BYVAL HPS AS LONG )
+
+DECLARE FUNCTION  GpiSetCurrentPosition%( BYVAL HPS AS LONG,_
+					  BYVAL PPOINTL AS LONG )
+
+DECLARE FUNCTION  GpiQueryCurrentPosition%( BYVAL HPS AS LONG,_
+					    BYVAL PPOINTL AS LONG )
+
+
+'

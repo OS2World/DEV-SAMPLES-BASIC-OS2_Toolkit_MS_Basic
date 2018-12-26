@@ -1,0 +1,7 @@
+  NAME		 WINATOM  WINDOWAPI
+   
+  DESCRIPTION	 'BASIC Presentation Manager Atom Table Program'
+  PROTMODE
+  HEAPSIZE       1024
+  STACKSIZE      8192
+  EXPORTS	 BasClientWndProc

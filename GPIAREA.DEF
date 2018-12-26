@@ -1,0 +1,7 @@
+  NAME		 GPIAREA        WINDOWAPI
+
+  DESCRIPTION	 'BASIC Presentation Manager Demo for GpiArea.BI'
+  PROTMODE
+  HEAPSIZE       1024
+  STACKSIZE      8192
+  EXPORTS	 BasClientWndProc

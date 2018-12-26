@@ -1,0 +1,36 @@
+/*  WinAccel.RC is resource file to define menus and accel tables
+**  for WinAccel.BAS.
+**
+**  NOTE: The resource compiler (RC) which comes with the PM Toolkit
+**	  uses C syntax for constants, comments and block definition.
+*/
+
+#define ID_RESOURCE 1	  /* Constants for Menu definition */
+#define IDM_BEEP    2
+#define IDM_BEEP1   3
+#define IDM_BEEP2   4
+#define IDM_BEEP3   5
+#define IDM_EXIT    6
+#define IDM_BYE     7
+#define ID_ACCEL    8
+
+MENU ID_RESOURCE
+      {
+      SUBMENU "~Beep",		IDM_BEEP
+           {
+	   MENUITEM "Beep ~1 (CTRL 1)",   IDM_BEEP1
+	   MENUITEM "Beep ~2 (CTRL 2)",   IDM_BEEP2
+	   MENUITEM "Beep ~3 (CTRL 3)",   IDM_BEEP3
+           }
+      SUBMENU "~Exit",		IDM_EXIT
+           {
+           MENUITEM "Good ~Bye",   IDM_BYE
+           }
+      }
+
+ACCELTABLE ID_ACCEL
+      {
+      "1", IDM_BEEP1, CONTROL
+      "2", IDM_BEEP2, CONTROL
+      "3", IDM_BEEP3, CONTROL
+      }
